@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/ranged_enemy.tscn" id="2_ranged_enemy"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" path="res://assets/props/grass.png" id="5_grass"]
 [ext_resource type="Texture2D" path="res://assets/props/crate.png" id="6_crate"]
 [ext_resource type="Texture2D" path="res://assets/props/pot.png" id="7_pot"]
+[ext_resource type="FontFile" path="res://assets/ui/font_normal.ttf" id="8_font"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_three"]
 bg_color = Color(0.105882, 0.180392, 0.172549, 1)
@@ -98,6 +99,7 @@ offset_top = 18.0
 offset_right = 600.0
 offset_bottom = 42.0
 theme_override_colors/font_color = Color(0.94902, 0.882353, 0.647059, 1)
+theme_override_fonts/font = ExtResource("8_font")
 theme_override_font_sizes/font_size = 13
 text = "第三关：还需 3 个卷轴"
 horizontal_alignment = 1

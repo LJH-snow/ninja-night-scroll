@@ -1,6 +1,6 @@
 # 忍者夜行：三分钟夺卷
 
-一个使用 Godot 4.7 制作的俯视角 2D 小游戏。玩家控制忍者闯过四张相连地图，每关收集 3 个卷轴并抵达出口；四关共用 3 分钟和同一条生命值。敌人会追击或保持距离发射弹体，玩家可以躲避弹体并用近战反击。
+一个使用 Godot 4.7 制作的俯视角 2D 小游戏。玩家控制忍者闯过五张相连地图，每关收集 3 个卷轴并抵达出口；五关共用 3 分钟和同一条生命值。敌人会追击或保持距离发射弹体，玩家可以躲避弹体并用近战反击。
 
 ## 操作
 
@@ -18,7 +18,7 @@
 
 ## 项目结构
 
-- `scenes/`：四张地图、近战/远程敌人、敌人弹体、玩家、卷轴和出口。
+- `scenes/`：五张地图、近战/远程敌人、敌人弹体、玩家、卷轴和出口。
 - `scenes/title_screen.tscn`：标题页、角色展示和操作说明。
 - `scripts/`：移动、战斗、敌人、收集、倒计时和胜负逻辑。
 - `assets/`：角色、地图、UI、字体、音频和装饰。
@@ -26,7 +26,7 @@
 
 ## 发布状态
 
-阶段 12 的第四关与四地图流程已完成；Web/macOS 发布候选已重新导出：
+阶段 13 的第五关与五地图流程已完成；Web/macOS 发布候选已重新导出：
 
 - itch.io Web 包：`release/ninja-night-scroll-web.zip`
 - macOS Universal 2 包：`release/macos/NinjaNightScroll.zip`
@@ -35,3 +35,41 @@
 macOS 包当前为 ad-hoc 签名，尚未 Developer ID 签名或 notarize；本机 Keychain 未检测到 Developer ID Application 身份。项目尚未自动上传 itch.io。
 
 素材和字体授权记录见 `docs/asset_licenses.md`。
+
+# Ninja Night Scroll: Three-Minute Escape
+
+A top-down 2D action game made with Godot 4.7. Guide a ninja through five connected maps, collect three scrolls on each map, and reach the exit. All five stages share one three-minute timer and one health bar. Chasing enemies and ranged enemies will attack you, so keep moving, dodge projectiles, and fight back with close-range attacks.
+
+## Controls
+
+- `WASD` or Arrow Keys: Move
+- `Space`: Attack
+- `Esc` / `P`: Pause or resume
+- Pause menu slider: Adjust and save the master volume
+- `R`: Restart after victory or defeat
+
+## Running
+
+1. Open the project with Godot 4.7.x.
+2. Press F5 to run the project; the title screen displays the controls first.
+3. If using the embedded editor game window, switch the top toolbar to `输入` (Input) mode and click the game view.
+
+## Project Structure
+
+- `scenes/`: Five maps, melee/ranged enemies, enemy projectiles, the player, scrolls, and exits.
+- `scenes/title_screen.tscn`: Title screen, character showcase, and controls.
+- `scripts/`: Movement, combat, enemies, pickups, countdown, and result logic.
+- `assets/`: Characters, maps, UI, fonts, audio, and decorations.
+- `docs/`: Game plan, release checklist, itch.io copy, and license records.
+
+## Release Status
+
+Stage 13, including the fifth stage and five-map progression, is complete. Web and macOS release candidates have been regenerated:
+
+- itch.io Web build: `release/ninja-night-scroll-web.zip`
+- Universal 2 macOS build: `release/macos/NinjaNightScroll.zip`
+- Page cover: `release/itch-cover.png`
+
+The macOS build is ad-hoc signed and has not been signed with Developer ID or notarized. No Developer ID Application identity is available in the local Keychain, and the project has not been uploaded to itch.io automatically.
+
+See `docs/asset_licenses.md` for the asset and font license records.

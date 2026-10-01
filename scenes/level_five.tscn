@@ -1,21 +1,21 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_enemy"]
-[ext_resource type="PackedScene" path="res://scenes/scroll_pickup.tscn" id="2_scroll"]
-[ext_resource type="PackedScene" path="res://scenes/exit_zone.tscn" id="3_exit"]
-[ext_resource type="PackedScene" path="res://scenes/ranged_enemy.tscn" id="4_ranged_enemy"]
-[ext_resource type="Texture2D" path="res://assets/props/crate.png" id="4_crate"]
-[ext_resource type="Texture2D" path="res://assets/props/pot.png" id="5_pot"]
-[ext_resource type="Texture2D" path="res://assets/props/grass.png" id="6_grass"]
-[ext_resource type="FontFile" path="res://assets/ui/font_normal.ttf" id="7_font"]
+[ext_resource type="PackedScene" path="res://scenes/ranged_enemy.tscn" id="2_ranged_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/scroll_pickup.tscn" id="3_scroll"]
+[ext_resource type="PackedScene" path="res://scenes/exit_zone.tscn" id="4_exit"]
+[ext_resource type="Texture2D" path="res://assets/props/grass.png" id="5_grass"]
+[ext_resource type="Texture2D" path="res://assets/props/crate.png" id="6_crate"]
+[ext_resource type="Texture2D" path="res://assets/props/pot.png" id="7_pot"]
+[ext_resource type="FontFile" path="res://assets/ui/font_normal.ttf" id="8_font"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_two"]
-bg_color = Color(0.137255, 0.207843, 0.239216, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_five"]
+bg_color = Color(0.160784, 0.117647, 0.172549, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.427451, 0.572549, 0.588235, 1)
+border_color = Color(0.713725, 0.560784, 0.298039, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -33,138 +33,155 @@ size = Vector2(48, 46)
 [sub_resource type="CircleShape2D" id="CircleShape2D_pot"]
 radius = 11.0
 
-[node name="LevelTwo" type="Panel"]
+[node name="LevelFive" type="Panel"]
 offset_left = 72.0
 offset_top = 94.0
 offset_right = 888.0
 offset_bottom = 470.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_level_two")
+theme_override_styles/panel = SubResource("StyleBoxFlat_level_five")
 
-[node name="NorthCorridor" type="ColorRect" parent="."]
-offset_right = 816.0
-offset_top = 70.0
-offset_bottom = 126.0
+[node name="Keep" type="ColorRect" parent="."]
+offset_left = 276.0
+offset_top = 96.0
+offset_right = 540.0
+offset_bottom = 280.0
 mouse_filter = 2
-color = Color(0.372549, 0.333333, 0.278431, 1)
+color = Color(0.290196, 0.196078, 0.25098, 1)
 
-[node name="MainCorridor" type="ColorRect" parent="."]
-offset_right = 816.0
+[node name="WestBridge" type="ColorRect" parent="."]
+offset_left = 54.0
 offset_top = 160.0
+offset_right = 330.0
 offset_bottom = 216.0
 mouse_filter = 2
-color = Color(0.372549, 0.333333, 0.278431, 1)
+color = Color(0.439216, 0.34902, 0.290196, 1)
 
-[node name="SouthCorridor" type="ColorRect" parent="."]
-offset_right = 816.0
-offset_top = 278.0
-offset_bottom = 334.0
+[node name="EastBridge" type="ColorRect" parent="."]
+offset_left = 486.0
+offset_top = 160.0
+offset_right = 762.0
+offset_bottom = 216.0
 mouse_filter = 2
-color = Color(0.372549, 0.333333, 0.278431, 1)
+color = Color(0.439216, 0.34902, 0.290196, 1)
 
-[node name="WestCorridor" type="ColorRect" parent="."]
-offset_left = 122.0
-offset_top = 0.0
-offset_right = 178.0
-offset_bottom = 376.0
+[node name="NorthStairs" type="ColorRect" parent="."]
+offset_left = 380.0
+offset_top = 20.0
+offset_right = 436.0
+offset_bottom = 124.0
 mouse_filter = 2
-color = Color(0.372549, 0.333333, 0.278431, 1)
+color = Color(0.439216, 0.34902, 0.290196, 1)
 
-[node name="EastCorridor" type="ColorRect" parent="."]
-offset_left = 620.0
-offset_top = 0.0
-offset_right = 676.0
-offset_bottom = 376.0
+[node name="SouthHall" type="ColorRect" parent="."]
+offset_left = 380.0
+offset_top = 252.0
+offset_right = 436.0
+offset_bottom = 356.0
 mouse_filter = 2
-color = Color(0.372549, 0.333333, 0.278431, 1)
+color = Color(0.439216, 0.34902, 0.290196, 1)
 
 [node name="ExitHighlight" type="ColorRect" parent="."]
-offset_left = 616.0
-offset_top = 34.0
-offset_right = 688.0
-offset_bottom = 106.0
+offset_left = 372.0
+offset_top = 8.0
+offset_right = 444.0
+offset_bottom = 80.0
 mouse_filter = 2
 color = Color(0.690196, 0.501961, 0.231373, 0.8)
 
-[node name="ExitZone" parent="." instance=ExtResource("3_exit")]
-position = Vector2(652, 70)
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(408, 334)
+
+[node name="ExitZone" parent="." instance=ExtResource("4_exit")]
+position = Vector2(408, 44)
 
 [node name="ObjectiveLabel" type="Label" parent="."]
-offset_left = 622.0
-offset_top = 109.0
-offset_right = 764.0
-offset_bottom = 135.0
+offset_left = 286.0
+offset_top = 82.0
+offset_right = 530.0
+offset_bottom = 106.0
 theme_override_colors/font_color = Color(0.94902, 0.882353, 0.647059, 1)
-theme_override_fonts/font = ExtResource("7_font")
+theme_override_fonts/font = ExtResource("8_font")
 theme_override_font_sizes/font_size = 13
-text = "第二关：还需 3 个卷轴"
+text = "第五关：还需 3 个卷轴"
 horizontal_alignment = 1
 
 [node name="CrateBlockA" type="StaticBody2D" parent="."]
-position = Vector2(345, 185)
+position = Vector2(196, 112)
 collision_layer = 1
 collision_mask = 1
 
 [node name="Sprite" type="Sprite2D" parent="CrateBlockA"]
 scale = Vector2(3, 3)
-texture = ExtResource("4_crate")
+texture = ExtResource("6_crate")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CrateBlockA"]
 shape = SubResource("RectangleShape2D_crate")
 
 [node name="CrateBlockB" type="StaticBody2D" parent="."]
-position = Vector2(460, 306)
+position = Vector2(620, 112)
 collision_layer = 1
 collision_mask = 1
 
 [node name="Sprite" type="Sprite2D" parent="CrateBlockB"]
 scale = Vector2(3, 3)
-texture = ExtResource("4_crate")
+texture = ExtResource("6_crate")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CrateBlockB"]
 shape = SubResource("RectangleShape2D_crate")
 
 [node name="PotBlock" type="StaticBody2D" parent="."]
-position = Vector2(300, 98)
+position = Vector2(408, 300)
 collision_layer = 1
 collision_mask = 1
 
 [node name="Sprite" type="Sprite2D" parent="PotBlock"]
 scale = Vector2(3, 3)
-texture = ExtResource("5_pot")
+texture = ExtResource("7_pot")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PotBlock"]
 shape = SubResource("CircleShape2D_pot")
 
 [node name="GrassA" type="Sprite2D" parent="."]
-position = Vector2(48, 46)
+position = Vector2(58, 58)
 scale = Vector2(3, 3)
-texture = ExtResource("6_grass")
+texture = ExtResource("5_grass")
 
 [node name="GrassB" type="Sprite2D" parent="."]
-position = Vector2(760, 236)
+position = Vector2(758, 58)
 scale = Vector2(3, 3)
-texture = ExtResource("6_grass")
+texture = ExtResource("5_grass")
 
 [node name="GrassC" type="Sprite2D" parent="."]
-position = Vector2(250, 350)
+position = Vector2(80, 300)
 scale = Vector2(3, 3)
-texture = ExtResource("6_grass")
+texture = ExtResource("5_grass")
+
+[node name="GrassD" type="Sprite2D" parent="."]
+position = Vector2(740, 300)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
 
 [node name="Enemy" parent="." instance=ExtResource("1_enemy")]
-position = Vector2(720, 190)
+position = Vector2(160, 250)
 
-[node name="RangedEnemy" parent="." instance=ExtResource("4_ranged_enemy")]
-position = Vector2(520, 306)
+[node name="EnemyB" parent="." instance=ExtResource("1_enemy")]
+position = Vector2(660, 250)
 
-[node name="ScrollPickupA" parent="." instance=ExtResource("2_scroll")]
-position = Vector2(220, 98)
+[node name="RangedEnemy" parent="." instance=ExtResource("2_ranged_enemy")]
+position = Vector2(210, 70)
 
-[node name="ScrollPickupB" parent="." instance=ExtResource("2_scroll")]
-position = Vector2(480, 188)
+[node name="RangedEnemyB" parent="." instance=ExtResource("2_ranged_enemy")]
+position = Vector2(606, 70)
 
-[node name="ScrollPickupC" parent="." instance=ExtResource("2_scroll")]
-position = Vector2(720, 306)
+[node name="ScrollPickupA" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(150, 300)
+
+[node name="ScrollPickupB" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(408, 170)
+
+[node name="ScrollPickupC" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(666, 300)
 
 [node name="BoundaryTop" type="StaticBody2D" parent="."]
 position = Vector2(408, 4)

@@ -25,6 +25,7 @@ func _run() -> void:
 	var player: Node = main.get_node("Player")
 	var level_three: Control = main.get_node("LevelThree") as Control
 	var level_four: Control = main.get_node("LevelFour") as Control
+	var level_five: Control = main.get_node("LevelFive") as Control
 	_check(not level_four.visible, "fourth map starts hidden")
 	_check(level_four.has_node("SpawnPoint"), "fourth map defines its player entrance")
 	_check(level_four.has_node("ExitZone"), "fourth map defines an exit")
@@ -41,7 +42,7 @@ func _run() -> void:
 	main.scrolls_collected = 3
 	main.call("_on_exit_entered")
 	_check(int(main.get("current_level_index")) == 4, "third exit advances to the fourth level")
-	_check(not main.game_over, "third exit does not complete the four-level run")
+	_check(not main.game_over, "third exit does not complete the five-level run")
 	_check(level_four.visible, "fourth map becomes visible")
 	_check(not level_three.visible, "third map hides after transition")
 	_check(int(player.get("health")) == 2, "player health persists through the fourth-level entrance")
@@ -55,8 +56,10 @@ func _run() -> void:
 	for scroll_name in ["ScrollPickupA", "ScrollPickupB", "ScrollPickupC"]:
 		(level_four.get_node(scroll_name) as Area2D).call("_on_body_entered", player)
 	main.call("_on_exit_entered")
-	_check(main.game_over, "fourth exit completes the game")
-	_check(main.get_node("HUD/ResultOverlay/ResultLabel").text == "任务完成", "final victory appears after the fourth level")
+	_check(int(main.get("current_level_index")) == 5, "fourth exit opens the fifth level")
+	_check(not main.game_over, "fourth exit does not complete the five-level run")
+	_check(level_five.visible, "fifth map becomes visible after the fourth level")
+	_check(main.get_node("Subtitle").text.contains("第五关"), "HUD identifies the fifth level after the fourth exit")
 
 	main.queue_free()
 	await process_frame

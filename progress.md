@@ -140,3 +140,22 @@
 - 修复 `scripts/player.gd` 在物理帧直接关闭 `AttackArea.monitoring` 的问题，改用 `set_deferred`；死亡复现的 Chromium 控制台错误降为 0。
 - 新增 `tests/player_death_physics_test.gd` 覆盖死亡中的攻击状态，四关/第三关/远程战斗回归与当前主场景启动均通过。
 - Web/macOS 候选包已包含该修复；Web 哈希为 `93bb1f37a909b97f3e4e00214c520b42a7e6e02803a13d6913cf411ac3a9efd3`，macOS 哈希为 `a048d02ae19c22f4c3bcd5852cc093e35eb74de6eaf89d7383b891fd809e3ba3`。
+
+## 2026-10-01 第五关开发开始
+
+- 用户确认先开发第五关和第五张地图。
+- 新增 `tests/level_five_test.gd` 红测，覆盖第五关资源、四次关卡切换、状态继承、入口位置、卷轴重置和最终胜利。
+- 阶段 13 仍待实现；先确认红测因缺少第五关场景失败，再添加地图与切换逻辑。
+
+## 2026-10-01 第五关与第五张地图
+
+- 新增 `scenes/level_five.tscn`「星陨天守」，包括中央天守、四向路径、障碍物、近战/远程敌人、入口、出口和 3 个卷轴。
+- 主场景现在依次串联五关；生命与 180 秒总计时保持不变，第五关出口才触发最终胜利。
+- `scripts/main.gd` 接入第五关显示、处理模式、出口信号、入口传送和 HUD 标题。
+- `tests/level_five_test.gd` 红测先确认第五关缺失，绿测覆盖四次切换、旧地图隐藏、状态继承、第五关入口、卷轴重置和最终胜利。
+- `tests/level_four_test.gd` 已更新为验证第四关进入第五关，避免把第四关误判为最终关。
+- 阶段 13、阶段 12、死亡碰撞修复和远程战斗回归通过；Web/macOS 五关候选包已重新导出，哈希见 `docs/release_manifest.md`。
+- 用户反馈第二至第五关的出口提示出现缺字方框；初步定位为地图自身 `ObjectiveLabel` 未配置主场景像素字体的 CJK fallback，新增 `tests/ui_font_fallback_test.gd` 红测。
+- 五关 Web ZIP 完整性检查与 macOS ad-hoc 签名、Universal 2、无头启动均通过；完整 Chromium 路线尚未抵达第五关。
+- 修复第二至第五关 `ObjectiveLabel` 未设置 `font_normal.ttf` CJK fallback 的问题；新增 `tests/ui_font_fallback_test.gd`，五个地图提示的中文 fallback 全部通过。
+- Web/macOS 候选包已重新导出并包含字体修复；Web 哈希为 `8ffb769c96cad832080fa063ec43da2b577895cdc9f40292094c6b06b38c9368`，macOS 哈希为 `70d0b3e107f54304397d614bba3b5755e3d3b2ea9ec9cb5df454b8d4251fe8ab`。
