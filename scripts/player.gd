@@ -46,7 +46,7 @@ func _physics_process(delta: float) -> void:
 
 	if is_dead():
 		velocity = Vector2.ZERO
-		attack_area.monitoring = false
+		attack_area.set_deferred("monitoring", false)
 		attack_visual.visible = false
 		return
 
@@ -60,7 +60,7 @@ func _physics_process(delta: float) -> void:
 	attack_cooldown_left = maxf(attack_cooldown_left - delta, 0.0)
 	var was_attacking := attack_time_left > 0.0
 	attack_time_left = maxf(attack_time_left - delta, 0.0)
-	attack_area.monitoring = attack_time_left > 0.0
+	attack_area.set_deferred("monitoring", attack_time_left > 0.0)
 	attack_visual.visible = attack_time_left > 0.0
 	_damage_attack_targets()
 	if was_attacking and attack_time_left == 0.0:

@@ -135,4 +135,8 @@
 - `tests/level_four_test.gd` 红测先确认第四关缺失，绿测覆盖三次切换、旧地图隐藏、状态继承、第四关入口、卷轴重置和最终胜利。
 - 旧 `tests/level_three_test.gd` 已更新为验证第三关进入第四关，避免把第三关误判为最终关。
 - 阶段 12、阶段 11 和远程战斗回归通过；Web/macOS 四关候选包已重新导出，哈希见 `docs/release_manifest.md`。
-- Web ZIP 完整性检查与 macOS ad-hoc 签名、Universal 2、无头启动均通过；当前 Web 包尚未在 Chromium 中实测第四关。
+- Web ZIP 完整性检查与 macOS ad-hoc 签名、Universal 2、无头启动均通过；完整 Web 路线尚未在 Chromium 中抵达第四关。
+- Chromium 实测未完成完整通关：真实移动和卷轴计数有效，但第一关敌人会在路线中击败玩家；隔离确认 Godot Web 碰撞回调错误发生在玩家死亡帧。
+- 修复 `scripts/player.gd` 在物理帧直接关闭 `AttackArea.monitoring` 的问题，改用 `set_deferred`；死亡复现的 Chromium 控制台错误降为 0。
+- 新增 `tests/player_death_physics_test.gd` 覆盖死亡中的攻击状态，四关/第三关/远程战斗回归与当前主场景启动均通过。
+- Web/macOS 候选包已包含该修复；Web 哈希为 `93bb1f37a909b97f3e4e00214c520b42a7e6e02803a13d6913cf411ac3a9efd3`，macOS 哈希为 `a048d02ae19c22f4c3bcd5852cc093e35eb74de6eaf89d7383b891fd809e3ba3`。
