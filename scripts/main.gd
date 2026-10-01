@@ -12,6 +12,7 @@ const CJK_FONT: Font = preload("res://assets/ui/NotoSansSC-Regular.ttf")
 @onready var playfield: Panel = $Playfield
 @onready var level_two: Panel = $LevelTwo
 @onready var level_three: Panel = $LevelThree
+@onready var level_four: Panel = $LevelFour
 @onready var subtitle_label: Label = $Subtitle
 @onready var objective_label: Label = $Playfield/ObjectiveLabel
 @onready var result_overlay: ColorRect = $HUD/ResultOverlay
@@ -43,8 +44,10 @@ func _ready() -> void:
 	playfield.process_mode = Node.PROCESS_MODE_PAUSABLE
 	level_two.process_mode = Node.PROCESS_MODE_DISABLED
 	level_three.process_mode = Node.PROCESS_MODE_DISABLED
+	level_four.process_mode = Node.PROCESS_MODE_DISABLED
 	level_two.visible = false
 	level_three.visible = false
+	level_four.visible = false
 	$HUD.process_mode = Node.PROCESS_MODE_PAUSABLE
 	$Audio.process_mode = Node.PROCESS_MODE_PAUSABLE
 	pause_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -59,7 +62,7 @@ func _ready() -> void:
 	player.health_changed.connect(_on_player_health_changed)
 	player.died.connect(_on_player_died)
 	player.attack_started.connect(_on_attack_started)
-	for level in [playfield, level_two, level_three]:
+	for level in [playfield, level_two, level_three, level_four]:
 		var level_exit: Area2D = level.get_node("ExitZone") as Area2D
 		level_exit.connect("player_entered", Callable(self, "_on_exit_entered"))
 	music.finished.connect(_on_music_finished)
@@ -136,7 +139,7 @@ func _on_exit_entered() -> void:
 	if game_over:
 		return
 	if scrolls_collected >= SCROLL_TARGET:
-		if current_level_index < 3:
+		if current_level_index < 4:
 			_advance_to_next_level()
 		else:
 			_finish_game(true, "任务完成")
@@ -144,14 +147,16 @@ func _on_exit_entered() -> void:
 		objective_label.text = "还需收集 %d 个卷轴" % (SCROLL_TARGET - scrolls_collected)
 
 func _advance_to_next_level() -> void:
-	if current_level_index >= 3 or game_over:
+	if current_level_index >= 4 or game_over:
 		return
 	current_level.visible = false
 	current_level.process_mode = Node.PROCESS_MODE_DISABLED
 	if current_level_index == 1:
 		current_level = level_two
-	else:
+	elif current_level_index == 2:
 		current_level = level_three
+	else:
+		current_level = level_four
 	current_level.visible = true
 	current_level.process_mode = Node.PROCESS_MODE_PAUSABLE
 	current_level_index += 1
@@ -159,8 +164,10 @@ func _advance_to_next_level() -> void:
 	objective_label = current_level.get_node("ObjectiveLabel") as Label
 	if current_level_index == 2:
 		player.global_position = Vector2(222.0, 414.0)
-	else:
+	elif current_level_index == 3:
 		player.global_position = (level_three.get_node("SpawnPoint") as Marker2D).global_position
+	else:
+		player.global_position = (level_four.get_node("SpawnPoint") as Marker2D).global_position
 	player.facing_direction = Vector2.RIGHT
 	_update_scroll_hud()
 	_update_level_display()
@@ -189,8 +196,10 @@ func _update_level_display() -> void:
 		subtitle_label.text = "第一关 · 旧村小径"
 	elif current_level_index == 2:
 		subtitle_label.text = "第二关 · 石仓回廊"
-	else:
+	elif current_level_index == 3:
 		subtitle_label.text = "第三关 · 竹海古道"
+	else:
+		subtitle_label.text = "第四关 · 月影神殿"
 
 func _finish_game(won: bool, message: String) -> void:
 	if game_over:

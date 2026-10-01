@@ -51,8 +51,9 @@ func _run() -> void:
 	for scroll_name in ["ScrollPickupA", "ScrollPickupB", "ScrollPickupC"]:
 		(level_three.get_node(scroll_name) as Area2D).call("_on_body_entered", player)
 	main.call("_on_exit_entered")
-	_check(main.game_over, "third exit completes the game")
-	_check(main.get_node("HUD/ResultOverlay/ResultLabel").text == "任务完成", "final victory appears after the third level")
+	_check(int(main.get("current_level_index")) == 4, "third exit opens the fourth level")
+	_check(not main.game_over, "third exit does not complete the four-level run")
+	_check(main.get_node("LevelFour").visible, "fourth map becomes visible after the third level")
 
 	main.queue_free()
 	await process_frame

@@ -6,11 +6,11 @@
 
 ## 简介
 
-闯过三张相连地图，每关收集 3 个卷轴并抵达出口；三关共用 3 分钟和同一条生命值。近战敌人会追踪你，远程敌人会拉开距离发射弹体。灵活走位躲避攻击，再用近战反击完成逃脱。
+闯过四张相连地图，每关收集 3 个卷轴并抵达出口；四关共用 3 分钟和同一条生命值。近战敌人会追踪你，远程敌人会拉开距离发射弹体。灵活走位躲避攻击，再用近战反击完成逃脱。
 
 ## English Summary
 
-Fight through three connected maps, collecting three scrolls on each before reaching the exit. All stages share one three-minute timer and health bar. Dodge the chasing and ranged enemies, then fight back with close-range attacks.
+Fight through four connected maps, collecting three scrolls on each before reaching the exit. All stages share one three-minute timer and health bar. Dodge the chasing and ranged enemies, then fight back with close-range attacks.
 
 ## 操作
 

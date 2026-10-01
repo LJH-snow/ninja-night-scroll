@@ -8,24 +8,24 @@
 
 - 文件：`release/ninja-night-scroll-web.zip`
 - 内容：`index.html`、WASM、JavaScript、PCK、音频 worklet 和图标资源。
-- SHA-256：`20907ff9186c9c14bd2aea7c58ed7d115581275c818f3930afd9a5009891c940`
+- SHA-256：`33af875128c35e8c4217b3b4ec341ca0b0df5ad4b7dd54129288b8f7bb667231`
 - 校验：`unzip -t` 通过。
-- PCK：8,689,896 字节，含三张地图、远程敌人/弹体、Noto Sans SC 和 OFL 1.1；导出过滤掉 godot-ai 插件、测试脚本和发布文档。
+- PCK：8,696,228 字节，含四张地图、远程敌人/弹体、Noto Sans SC 和 OFL 1.1；导出过滤掉 godot-ai 插件、测试脚本和发布文档。
 
 ## 运行验证
 
-- Godot Web 导出成功，当前 ZIP 完整性检查通过；阶段 10/11 Godot 行为测试与标题场景 headless 启动通过。
-- 当前包尚未在 Chromium/WebGL 中重新实测第三关；标题页、暂停流程与音量控件的 Chromium 截图来自上一版候选。
+- Godot Web 导出成功，当前 ZIP 完整性检查通过；阶段 10/11/12 Godot 行为测试与标题场景 headless 启动通过。
+- 当前包尚未在 Chromium/WebGL 中重新实测第四关；标题页、暂停流程与音量控件的 Chromium 截图来自上一版候选。
 - 上一版已有的输入、标题、暂停和音量行为测试结果仍记录在旧截图中：`output/playwright/title-screen.png`、`output/playwright/pause-menu.png`、`output/playwright/title-enter-start.png`。
 
 ## macOS 候选包
 
 - 文件：`release/macos/NinjaNightScroll.zip`
 - 架构：Universal 2（x86_64 + arm64）。
-- SHA-256：`1abca8d0446b359f467ad3c6656ac365350a08c361415f8aa374b5887ffa8fde`
+- SHA-256：`6c79d51e731de95044ca9f4c796f0fd0789bf2472a6d4530b09ea799922e1db6`
 - 校验：ZIP 可解压；`codesign --verify --deep --strict` 通过；Universal 2（x86_64 + arm64）可执行文件 `--headless --quit-after 30` 无错误启动。
 - 签名：ad-hoc；未使用 Developer ID，未 notarize。检查到 Keychain 中有 0 个有效签名身份、0 个 Developer ID Application 身份。
-- 当前包包含第三关、远程敌人与弹体；标题页、暂停流程和音量设置也已包含。
+- 当前包包含第四关、远程敌人与弹体；标题页、暂停流程和音量设置也已包含。
 
 ## 音频检查
 

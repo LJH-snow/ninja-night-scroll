@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_enemy"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" path="res://assets/props/crate.png" id="15_crate"]
 [ext_resource type="PackedScene" path="res://scenes/level_two.tscn" id="16_level_two"]
 [ext_resource type="PackedScene" path="res://scenes/level_three.tscn" id="17_level_three"]
+[ext_resource type="PackedScene" path="res://scenes/level_four.tscn" id="18_level_four"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playfield"]
 bg_color = Color(0.105882, 0.2, 0.145098, 1)
@@ -91,6 +92,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_playfield")
 visible = false
 
 [node name="LevelThree" parent="." instance=ExtResource("17_level_three")]
+visible = false
+
+[node name="LevelFour" parent="." instance=ExtResource("18_level_four")]
 visible = false
 
 [node name="HorizontalPath" type="ColorRect" parent="Playfield"]

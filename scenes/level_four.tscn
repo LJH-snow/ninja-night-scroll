@@ -1,0 +1,209 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/ranged_enemy.tscn" id="2_ranged_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/scroll_pickup.tscn" id="3_scroll"]
+[ext_resource type="PackedScene" path="res://scenes/exit_zone.tscn" id="4_exit"]
+[ext_resource type="Texture2D" path="res://assets/props/grass.png" id="5_grass"]
+[ext_resource type="Texture2D" path="res://assets/props/crate.png" id="6_crate"]
+[ext_resource type="Texture2D" path="res://assets/props/pot.png" id="7_pot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_four"]
+bg_color = Color(0.12549, 0.109804, 0.207843, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.482353, 0.407843, 0.647059, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_horizontal"]
+size = Vector2(816, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vertical"]
+size = Vector2(8, 376)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crate"]
+size = Vector2(48, 46)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pot"]
+radius = 11.0
+
+[node name="LevelFour" type="Panel"]
+offset_left = 72.0
+offset_top = 94.0
+offset_right = 888.0
+offset_bottom = 470.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_level_four")
+
+[node name="MoonPool" type="ColorRect" parent="."]
+offset_left = 228.0
+offset_top = 86.0
+offset_right = 588.0
+offset_bottom = 290.0
+mouse_filter = 2
+color = Color(0.196078, 0.180392, 0.337255, 1)
+
+[node name="WestHall" type="ColorRect" parent="."]
+offset_left = 70.0
+offset_top = 160.0
+offset_right = 390.0
+offset_bottom = 216.0
+mouse_filter = 2
+color = Color(0.270588, 0.227451, 0.341176, 1)
+
+[node name="EastHall" type="ColorRect" parent="."]
+offset_left = 426.0
+offset_top = 160.0
+offset_right = 746.0
+offset_bottom = 216.0
+mouse_filter = 2
+color = Color(0.270588, 0.227451, 0.341176, 1)
+
+[node name="NorthHall" type="ColorRect" parent="."]
+offset_left = 380.0
+offset_top = 24.0
+offset_right = 436.0
+offset_bottom = 188.0
+mouse_filter = 2
+color = Color(0.270588, 0.227451, 0.341176, 1)
+
+[node name="SouthHall" type="ColorRect" parent="."]
+offset_left = 380.0
+offset_top = 188.0
+offset_right = 436.0
+offset_bottom = 352.0
+mouse_filter = 2
+color = Color(0.270588, 0.227451, 0.341176, 1)
+
+[node name="ExitHighlight" type="ColorRect" parent="."]
+offset_left = 692.0
+offset_top = 26.0
+offset_right = 764.0
+offset_bottom = 98.0
+mouse_filter = 2
+color = Color(0.690196, 0.501961, 0.231373, 0.8)
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(112, 308)
+
+[node name="ExitZone" parent="." instance=ExtResource("4_exit")]
+position = Vector2(728, 62)
+
+[node name="ObjectiveLabel" type="Label" parent="."]
+offset_left = 604.0
+offset_top = 104.0
+offset_right = 800.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.94902, 0.882353, 0.647059, 1)
+theme_override_font_sizes/font_size = 13
+text = "第四关：还需 3 个卷轴"
+horizontal_alignment = 1
+
+[node name="CrateBlockA" type="StaticBody2D" parent="."]
+position = Vector2(228, 116)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Sprite" type="Sprite2D" parent="CrateBlockA"]
+scale = Vector2(3, 3)
+texture = ExtResource("6_crate")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrateBlockA"]
+shape = SubResource("RectangleShape2D_crate")
+
+[node name="CrateBlockB" type="StaticBody2D" parent="."]
+position = Vector2(588, 270)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Sprite" type="Sprite2D" parent="CrateBlockB"]
+scale = Vector2(3, 3)
+texture = ExtResource("6_crate")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrateBlockB"]
+shape = SubResource("RectangleShape2D_crate")
+
+[node name="PotBlock" type="StaticBody2D" parent="."]
+position = Vector2(450, 104)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Sprite" type="Sprite2D" parent="PotBlock"]
+scale = Vector2(3, 3)
+texture = ExtResource("7_pot")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PotBlock"]
+shape = SubResource("CircleShape2D_pot")
+
+[node name="GrassA" type="Sprite2D" parent="."]
+position = Vector2(56, 54)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
+
+[node name="GrassB" type="Sprite2D" parent="."]
+position = Vector2(190, 330)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
+
+[node name="GrassC" type="Sprite2D" parent="."]
+position = Vector2(690, 300)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
+
+[node name="Enemy" parent="." instance=ExtResource("1_enemy")]
+position = Vector2(700, 300)
+
+[node name="EnemyB" parent="." instance=ExtResource("1_enemy")]
+position = Vector2(560, 70)
+
+[node name="RangedEnemy" parent="." instance=ExtResource("2_ranged_enemy")]
+position = Vector2(650, 190)
+
+[node name="RangedEnemyB" parent="." instance=ExtResource("2_ranged_enemy")]
+position = Vector2(300, 78)
+
+[node name="ScrollPickupA" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(150, 190)
+
+[node name="ScrollPickupB" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(408, 60)
+
+[node name="ScrollPickupC" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(650, 250)
+
+[node name="BoundaryTop" type="StaticBody2D" parent="."]
+position = Vector2(408, 4)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryTop"]
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="BoundaryBottom" type="StaticBody2D" parent="."]
+position = Vector2(408, 372)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryBottom"]
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="BoundaryLeft" type="StaticBody2D" parent="."]
+position = Vector2(4, 188)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryLeft"]
+shape = SubResource("RectangleShape2D_vertical")
+
+[node name="BoundaryRight" type="StaticBody2D" parent="."]
+position = Vector2(812, 188)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryRight"]
+shape = SubResource("RectangleShape2D_vertical")
