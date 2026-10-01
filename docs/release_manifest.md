@@ -8,29 +8,24 @@
 
 - 文件：`release/ninja-night-scroll-web.zip`
 - 内容：`index.html`、WASM、JavaScript、PCK、音频 worklet 和图标资源。
-- SHA-256：`b497aea5e10932f363f9b76fbf8200d1319d4353b1cfc5dcd6921fcf22fc9555`
+- SHA-256：`20907ff9186c9c14bd2aea7c58ed7d115581275c818f3930afd9a5009891c940`
 - 校验：`unzip -t` 通过。
-- PCK：约 8.3 MB，包含 Noto Sans SC 和 OFL 1.1；不含 godot-ai 插件脚本和发布文档。
+- PCK：8,689,896 字节，含三张地图、远程敌人/弹体、Noto Sans SC 和 OFL 1.1；导出过滤掉 godot-ai 插件、测试脚本和发布文档。
 
 ## 运行验证
 
-- Godot Web 导出命令成功完成。
-- 通过临时 HTTP 服务器在真实 Chromium/WebGL 中打开。
-- 中文标题、HUD、关卡装饰和胜负界面正常显示。
-- 浏览器控制台只有 Godot 正常启动日志，没有错误。
-- Web 输入已实测：方向键移动、Space 攻击、`R` 重开，并看到重开后 `03:00`、`3/3` 生命。
-- 标题页、按钮开始、Enter 开局、Escape 暂停面板与音量滑块已在 Chromium 中实测。
-- Escape/P 暂停时倒计时冻结；继续、重开、返回标题和音量保存均通过 Godot 场景行为测试。
-- 验证截图：`output/playwright/title-screen.png`、`output/playwright/pause-menu.png`、`output/playwright/title-enter-start.png`。
+- Godot Web 导出成功，当前 ZIP 完整性检查通过；阶段 10/11 Godot 行为测试与标题场景 headless 启动通过。
+- 当前包尚未在 Chromium/WebGL 中重新实测第三关；标题页、暂停流程与音量控件的 Chromium 截图来自上一版候选。
+- 上一版已有的输入、标题、暂停和音量行为测试结果仍记录在旧截图中：`output/playwright/title-screen.png`、`output/playwright/pause-menu.png`、`output/playwright/title-enter-start.png`。
 
 ## macOS 候选包
 
 - 文件：`release/macos/NinjaNightScroll.zip`
 - 架构：Universal 2（x86_64 + arm64）。
-- SHA-256：`32a1f51a5a1c0c61346b827cf50c64830e9a2c8a829e9587e17cfcf621f050b1`
-- 校验：ZIP 可解压；`codesign --verify --deep --strict` 通过；包内可执行文件 `--headless --quit-after 30` 无错误启动。
+- SHA-256：`1abca8d0446b359f467ad3c6656ac365350a08c361415f8aa374b5887ffa8fde`
+- 校验：ZIP 可解压；`codesign --verify --deep --strict` 通过；Universal 2（x86_64 + arm64）可执行文件 `--headless --quit-after 30` 无错误启动。
 - 签名：ad-hoc；未使用 Developer ID，未 notarize。检查到 Keychain 中有 0 个有效签名身份、0 个 Developer ID Application 身份。
-- 标题页、暂停流程和音量设置已包含在当前导出包。
+- 当前包包含第三关、远程敌人与弹体；标题页、暂停流程和音量设置也已包含。
 
 ## 音频检查
 

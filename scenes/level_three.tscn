@@ -1,0 +1,194 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/ranged_enemy.tscn" id="2_ranged_enemy"]
+[ext_resource type="PackedScene" path="res://scenes/scroll_pickup.tscn" id="3_scroll"]
+[ext_resource type="PackedScene" path="res://scenes/exit_zone.tscn" id="4_exit"]
+[ext_resource type="Texture2D" path="res://assets/props/grass.png" id="5_grass"]
+[ext_resource type="Texture2D" path="res://assets/props/crate.png" id="6_crate"]
+[ext_resource type="Texture2D" path="res://assets/props/pot.png" id="7_pot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_three"]
+bg_color = Color(0.105882, 0.180392, 0.172549, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.388235, 0.568627, 0.466667, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_horizontal"]
+size = Vector2(816, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vertical"]
+size = Vector2(8, 376)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crate"]
+size = Vector2(48, 46)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pot"]
+radius = 11.0
+
+[node name="LevelThree" type="Panel"]
+offset_left = 72.0
+offset_top = 94.0
+offset_right = 888.0
+offset_bottom = 470.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_level_three")
+
+[node name="River" type="ColorRect" parent="."]
+offset_left = 164.0
+offset_top = 136.0
+offset_right = 620.0
+offset_bottom = 278.0
+mouse_filter = 2
+color = Color(0.109804, 0.305882, 0.364706, 1)
+
+[node name="SouthTrail" type="ColorRect" parent="."]
+offset_right = 376.0
+offset_top = 278.0
+offset_bottom = 334.0
+mouse_filter = 2
+color = Color(0.376471, 0.4, 0.305882, 1)
+
+[node name="CentralTrail" type="ColorRect" parent="."]
+offset_left = 320.0
+offset_top = 80.0
+offset_right = 376.0
+offset_bottom = 334.0
+mouse_filter = 2
+color = Color(0.376471, 0.4, 0.305882, 1)
+
+[node name="StoneBridge" type="ColorRect" parent="."]
+offset_left = 320.0
+offset_top = 176.0
+offset_right = 676.0
+offset_bottom = 232.0
+mouse_filter = 2
+color = Color(0.490196, 0.478431, 0.376471, 1)
+
+[node name="EastTrail" type="ColorRect" parent="."]
+offset_left = 620.0
+offset_right = 676.0
+offset_bottom = 334.0
+mouse_filter = 2
+color = Color(0.376471, 0.4, 0.305882, 1)
+
+[node name="ExitHighlight" type="ColorRect" parent="."]
+offset_left = 612.0
+offset_top = 8.0
+offset_right = 684.0
+offset_bottom = 80.0
+mouse_filter = 2
+color = Color(0.690196, 0.501961, 0.231373, 0.8)
+
+[node name="SpawnPoint" type="Marker2D" parent="."]
+position = Vector2(150, 306)
+
+[node name="ExitZone" parent="." instance=ExtResource("4_exit")]
+position = Vector2(648, 44)
+
+[node name="ObjectiveLabel" type="Label" parent="."]
+offset_left = 392.0
+offset_top = 18.0
+offset_right = 600.0
+offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.94902, 0.882353, 0.647059, 1)
+theme_override_font_sizes/font_size = 13
+text = "第三关：还需 3 个卷轴"
+horizontal_alignment = 1
+
+[node name="CrateBlockA" type="StaticBody2D" parent="."]
+position = Vector2(240, 150)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Sprite" type="Sprite2D" parent="CrateBlockA"]
+scale = Vector2(3, 3)
+texture = ExtResource("6_crate")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrateBlockA"]
+shape = SubResource("RectangleShape2D_crate")
+
+[node name="PotBlockA" type="StaticBody2D" parent="."]
+position = Vector2(430, 248)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Sprite" type="Sprite2D" parent="PotBlockA"]
+scale = Vector2(3, 3)
+texture = ExtResource("7_pot")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PotBlockA"]
+shape = SubResource("CircleShape2D_pot")
+
+[node name="GrassA" type="Sprite2D" parent="."]
+position = Vector2(60, 62)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
+
+[node name="GrassB" type="Sprite2D" parent="."]
+position = Vector2(230, 62)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
+
+[node name="GrassC" type="Sprite2D" parent="."]
+position = Vector2(480, 292)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
+
+[node name="GrassD" type="Sprite2D" parent="."]
+position = Vector2(764, 302)
+scale = Vector2(3, 3)
+texture = ExtResource("5_grass")
+
+[node name="Enemy" parent="." instance=ExtResource("1_enemy")]
+position = Vector2(648, 284)
+
+[node name="RangedEnemy" parent="." instance=ExtResource("2_ranged_enemy")]
+position = Vector2(560, 204)
+
+[node name="ScrollPickupA" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(270, 306)
+
+[node name="ScrollPickupB" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(348, 110)
+
+[node name="ScrollPickupC" parent="." instance=ExtResource("3_scroll")]
+position = Vector2(450, 204)
+
+[node name="BoundaryTop" type="StaticBody2D" parent="."]
+position = Vector2(408, 4)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryTop"]
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="BoundaryBottom" type="StaticBody2D" parent="."]
+position = Vector2(408, 372)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryBottom"]
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="BoundaryLeft" type="StaticBody2D" parent="."]
+position = Vector2(4, 188)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryLeft"]
+shape = SubResource("RectangleShape2D_vertical")
+
+[node name="BoundaryRight" type="StaticBody2D" parent="."]
+position = Vector2(812, 188)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoundaryRight"]
+shape = SubResource("RectangleShape2D_vertical")

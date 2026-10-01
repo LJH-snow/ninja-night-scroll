@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_enemy"]
@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" path="res://assets/props/grass.png" id="13_grass"]
 [ext_resource type="Texture2D" path="res://assets/props/pot.png" id="14_pot"]
 [ext_resource type="Texture2D" path="res://assets/props/crate.png" id="15_crate"]
+[ext_resource type="PackedScene" path="res://scenes/level_two.tscn" id="16_level_two"]
+[ext_resource type="PackedScene" path="res://scenes/level_three.tscn" id="17_level_three"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playfield"]
 bg_color = Color(0.105882, 0.2, 0.145098, 1)
@@ -84,6 +86,12 @@ offset_right = 888.0
 offset_bottom = 470.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_playfield")
+
+[node name="LevelTwo" parent="." instance=ExtResource("16_level_two")]
+visible = false
+
+[node name="LevelThree" parent="." instance=ExtResource("17_level_three")]
+visible = false
 
 [node name="HorizontalPath" type="ColorRect" parent="Playfield"]
 offset_top = 160.0
@@ -196,11 +204,11 @@ collision_mask = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Playfield/BoundaryRight"]
 shape = SubResource("RectangleShape2D_vertical")
 
-[node name="Player" parent="Playfield" instance=ExtResource("5_player")]
-position = Vector2(328, 188)
-
 [node name="Enemy" parent="Playfield" instance=ExtResource("2_enemy")]
 position = Vector2(736, 320)
+
+[node name="Player" parent="." instance=ExtResource("5_player")]
+position = Vector2(400, 282)
 
 [node name="ScrollPickupA" parent="Playfield" instance=ExtResource("6_scroll")]
 position = Vector2(176, 92)
@@ -210,28 +218,6 @@ position = Vector2(648, 288)
 
 [node name="ScrollPickupC" parent="Playfield" instance=ExtResource("6_scroll")]
 position = Vector2(416, 304)
-
-[node name="PlayerCaption" type="Label" parent="Playfield"]
-offset_left = 280.0
-offset_top = 218.0
-offset_right = 376.0
-offset_bottom = 242.0
-theme_override_colors/font_color = Color(0.792157, 0.921569, 0.784314, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 13
-text = "玩家忍者"
-horizontal_alignment = 1
-
-[node name="EnemyCaption" type="Label" parent="Playfield"]
-offset_left = 484.0
-offset_top = 218.0
-offset_right = 580.0
-offset_bottom = 242.0
-theme_override_colors/font_color = Color(0.972549, 0.690196, 0.627451, 1)
-theme_override_fonts/font = ExtResource("4_font")
-theme_override_font_sizes/font_size = 13
-text = "追踪敌人"
-horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="."]
 offset_left = 32.0
@@ -251,7 +237,7 @@ offset_bottom = 84.0
 theme_override_colors/font_color = Color(0.572549, 0.694118, 0.721569, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 14
-text = "收集三个卷轴，躲开追踪者，在三分钟内抵达出口"
+text = "第一关 · 旧村小径"
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

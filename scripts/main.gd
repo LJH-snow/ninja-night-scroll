@@ -5,12 +5,15 @@ const GAME_DURATION := 180.0
 const SETTINGS_PATH := "user://settings.cfg"
 const CJK_FONT: Font = preload("res://assets/ui/NotoSansSC-Regular.ttf")
 
-@onready var player: NinjaPlayer = $Playfield/Player
+@onready var player: NinjaPlayer = $Player
 @onready var timer_label: Label = $HUD/StatusPanel/TimerLabel
 @onready var health_label: Label = $HUD/StatusPanel/HealthLabel
 @onready var scroll_label: Label = $HUD/StatusPanel/ScrollLabel
+@onready var playfield: Panel = $Playfield
+@onready var level_two: Panel = $LevelTwo
+@onready var level_three: Panel = $LevelThree
+@onready var subtitle_label: Label = $Subtitle
 @onready var objective_label: Label = $Playfield/ObjectiveLabel
-@onready var exit_zone: Area2D = $Playfield/ExitZone
 @onready var result_overlay: ColorRect = $HUD/ResultOverlay
 @onready var result_label: Label = $HUD/ResultOverlay/ResultLabel
 @onready var restart_label: Label = $HUD/ResultOverlay/RestartLabel
@@ -31,14 +34,21 @@ var scrolls_collected := 0
 var remaining_time: float = GAME_DURATION
 var game_over := false
 var is_paused := false
+var current_level_index := 1
+var current_level: Panel
 var last_health := -1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	$Playfield.process_mode = Node.PROCESS_MODE_PAUSABLE
+	playfield.process_mode = Node.PROCESS_MODE_PAUSABLE
+	level_two.process_mode = Node.PROCESS_MODE_DISABLED
+	level_three.process_mode = Node.PROCESS_MODE_DISABLED
+	level_two.visible = false
+	level_three.visible = false
 	$HUD.process_mode = Node.PROCESS_MODE_PAUSABLE
 	$Audio.process_mode = Node.PROCESS_MODE_PAUSABLE
 	pause_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
+	current_level = playfield
 	_configure_ui_font_fallback()
 	resume_button.pressed.connect(_resume_game)
 	restart_button.pressed.connect(_restart_game)
@@ -49,7 +59,9 @@ func _ready() -> void:
 	player.health_changed.connect(_on_player_health_changed)
 	player.died.connect(_on_player_died)
 	player.attack_started.connect(_on_attack_started)
-	exit_zone.connect("player_entered", Callable(self, "_on_exit_entered"))
+	for level in [playfield, level_two, level_three]:
+		var level_exit: Area2D = level.get_node("ExitZone") as Area2D
+		level_exit.connect("player_entered", Callable(self, "_on_exit_entered"))
 	music.finished.connect(_on_music_finished)
 	for pickup_node in get_tree().get_nodes_in_group("scroll_pickups"):
 		var pickup: Area2D = pickup_node as Area2D
@@ -58,6 +70,7 @@ func _ready() -> void:
 	_on_player_health_changed(player.health, player.max_health)
 	_update_scroll_hud()
 	_update_timer_hud()
+	_update_level_display()
 	_play_audio(music)
 
 func _exit_tree() -> void:
@@ -123,9 +136,34 @@ func _on_exit_entered() -> void:
 	if game_over:
 		return
 	if scrolls_collected >= SCROLL_TARGET:
-		_finish_game(true, "任务完成")
+		if current_level_index < 3:
+			_advance_to_next_level()
+		else:
+			_finish_game(true, "任务完成")
 	else:
 		objective_label.text = "还需收集 %d 个卷轴" % (SCROLL_TARGET - scrolls_collected)
+
+func _advance_to_next_level() -> void:
+	if current_level_index >= 3 or game_over:
+		return
+	current_level.visible = false
+	current_level.process_mode = Node.PROCESS_MODE_DISABLED
+	if current_level_index == 1:
+		current_level = level_two
+	else:
+		current_level = level_three
+	current_level.visible = true
+	current_level.process_mode = Node.PROCESS_MODE_PAUSABLE
+	current_level_index += 1
+	scrolls_collected = 0
+	objective_label = current_level.get_node("ObjectiveLabel") as Label
+	if current_level_index == 2:
+		player.global_position = Vector2(222.0, 414.0)
+	else:
+		player.global_position = (level_three.get_node("SpawnPoint") as Marker2D).global_position
+	player.facing_direction = Vector2.RIGHT
+	_update_scroll_hud()
+	_update_level_display()
 
 func _on_scroll_collected() -> void:
 	scrolls_collected = min(scrolls_collected + 1, SCROLL_TARGET)
@@ -146,6 +184,14 @@ func _update_timer_hud() -> void:
 	var seconds := total_seconds % 60
 	timer_label.text = "时间 %02d:%02d" % [minutes, seconds]
 
+func _update_level_display() -> void:
+	if current_level_index == 1:
+		subtitle_label.text = "第一关 · 旧村小径"
+	elif current_level_index == 2:
+		subtitle_label.text = "第二关 · 石仓回廊"
+	else:
+		subtitle_label.text = "第三关 · 竹海古道"
+
 func _finish_game(won: bool, message: String) -> void:
 	if game_over:
 		return
@@ -160,6 +206,7 @@ func _finish_game(won: bool, message: String) -> void:
 	player.set_physics_process(false)
 	player.set_process_unhandled_input(false)
 	get_tree().call_group("enemies", "set_physics_process", false)
+	get_tree().call_group("enemy_projectiles", "queue_free")
 	if won:
 		_play_audio(victory_sfx)
 		_flash_screen(Color(0.95, 0.76, 0.3, 1.0))

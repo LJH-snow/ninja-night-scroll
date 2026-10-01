@@ -18,6 +18,13 @@
 - [x] 新标题页显示操作说明，开始按钮与 Enter 均可进入关卡。
 - [x] 暂停菜单支持 Escape/P、继续、重开、返回标题。
 - [x] 暂停时游戏与倒计时冻结，音量滑块控制并保存 Master 音量。
+- [x] 三张地图通过出口串联；生命值和总计时继承，每关卷轴计数重置。
+- [x] 远程敌人会保持距离并发射伤害玩家的弹体，玩家可以近战击败它。
+- [x] 胜负结算时清除仍在场的敌人弹体。
+- [x] 阶段 9/10 headless 行为测试与两关通关回归通过。
+- [x] 第二关出口进入第三张地图；共享生命/总计时，最终胜利只在第三关出口触发。
+- [x] 阶段 11 headless 行为测试覆盖三关切换、入口位置、卷轴重置和最终胜利。
+- [x] Web/macOS 重新导出并通过 ZIP 完整性检查，macOS 签名与 Universal 2 启动验证通过。
 - [x] Web 实际画面确认标题页与暂停面板；浏览器控制台无错误。
 - [x] 生成 630×500 itch.io 封面和最终游戏截图。
 - [x] 导出 Universal macOS `.app` ZIP，并验证签名和无头启动。
@@ -27,10 +34,13 @@
 ## 待完成
 
 - [ ] 在扬声器或耳机上主观确认最终音乐与音效响度。
-- [ ] 对 macOS `.app` 做 Developer ID 签名和 notarization（可选，需要 Apple 开发者凭据）。
 - [ ] 用户确认后提交并推送当前未提交改动。
 - [ ] 用户完成 itch.io 登录和上传。
 
+## 暂不计划
+
+- 暂不购买 Apple Developer Program 会员或办理 macOS Developer ID 签名与 notarization；保留 ad-hoc macOS 包，优先免费发布 Web 版。
+
 ## 当前阻塞
 
-Web 与 macOS 发布候选、封面及截图均已生成；尚未自动上传或提交推送。macOS 包是 ad-hoc 签名、未 notarize。
+Web/macOS 候选包已包含三张地图和远程敌人；当前版本尚未在 Chromium 中复核第三关。未自动上传或提交推送。macOS 包是 ad-hoc 签名、未 notarize。

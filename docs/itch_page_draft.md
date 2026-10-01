@@ -6,11 +6,11 @@
 
 ## 简介
 
-进入被敌人占据的地图，收集 3 个卷轴并在倒计时结束前抵达出口。敌人会持续追踪你，合理利用路径、攻击和短暂无敌时间完成逃脱。
+闯过三张相连地图，每关收集 3 个卷轴并抵达出口；三关共用 3 分钟和同一条生命值。近战敌人会追踪你，远程敌人会拉开距离发射弹体。灵活走位躲避攻击，再用近战反击完成逃脱。
 
 ## English Summary
 
-Enter a small enemy-held map, collect three scrolls, and reach the exit before the three-minute timer runs out. Fight back, keep moving, and escape before the hunter catches you.
+Fight through three connected maps, collecting three scrolls on each before reaching the exit. All stages share one three-minute timer and health bar. Dodge the chasing and ranged enemies, then fight back with close-range attacks.
 
 ## 操作
 
