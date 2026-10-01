@@ -1,3 +1,10 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+/release/
+/.playwright-cli/
+/.learnings/
+/output/playwright/*.import
+/output/playwright/restart-check.png
+/output/playwright/web-export-final.png
+/output/playwright/web-export.png

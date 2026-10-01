@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/scroll_pickup.gd" id="1_script"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]
+radius = 14.0
+
+[node name="ScrollPickup" type="Area2D"]
+z_index = 1
+collision_layer = 4
+collision_mask = 1
+monitoring = true
+script = ExtResource("1_script")
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-8, -12, 8, -12, 8, 12, -8, 12)
+color = Color(0.937255, 0.760784, 0.309804, 1)
+
+[node name="Seal" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-8, -2, 8, -2, 8, 2, -8, 2)
+color = Color(0.666667, 0.176471, 0.14902, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_pickup")
