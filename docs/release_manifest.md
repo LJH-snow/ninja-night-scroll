@@ -8,7 +8,7 @@
 
 - 文件：`release/ninja-night-scroll-web.zip`
 - 内容：`index.html`、WASM、JavaScript、PCK、音频 worklet 和图标资源。
-- SHA-256：`92f0548328071595a540753ca51c0e4c282091f5f2e759451691845860cdb084`
+- SHA-256：`b497aea5e10932f363f9b76fbf8200d1319d4353b1cfc5dcd6921fcf22fc9555`
 - 校验：`unzip -t` 通过。
 - PCK：约 8.3 MB，包含 Noto Sans SC 和 OFL 1.1；不含 godot-ai 插件脚本和发布文档。
 
@@ -19,15 +19,18 @@
 - 中文标题、HUD、关卡装饰和胜负界面正常显示。
 - 浏览器控制台只有 Godot 正常启动日志，没有错误。
 - Web 输入已实测：方向键移动、Space 攻击、`R` 重开，并看到重开后 `03:00`、`3/3` 生命。
-- 验证截图：`output/playwright/restart-immediate.png`、`output/playwright/web-movement-check.png`、`output/playwright/web-attack-check.png`。
+- 标题页、按钮开始、Enter 开局、Escape 暂停面板与音量滑块已在 Chromium 中实测。
+- Escape/P 暂停时倒计时冻结；继续、重开、返回标题和音量保存均通过 Godot 场景行为测试。
+- 验证截图：`output/playwright/title-screen.png`、`output/playwright/pause-menu.png`、`output/playwright/title-enter-start.png`。
 
 ## macOS 候选包
 
 - 文件：`release/macos/NinjaNightScroll.zip`
 - 架构：Universal 2（x86_64 + arm64）。
-- SHA-256：`5060cd5f106cdc246b5b87e7d8639a8849ca2e74bc6c61838cf336064044737b`
+- SHA-256：`32a1f51a5a1c0c61346b827cf50c64830e9a2c8a829e9587e17cfcf621f050b1`
 - 校验：ZIP 可解压；`codesign --verify --deep --strict` 通过；包内可执行文件 `--headless --quit-after 30` 无错误启动。
 - 签名：ad-hoc；未使用 Developer ID，未 notarize。检查到 Keychain 中有 0 个有效签名身份、0 个 Developer ID Application 身份。
+- 标题页、暂停流程和音量设置已包含在当前导出包。
 
 ## 音频检查
 

@@ -109,3 +109,12 @@
 - Godot 载入并启动五个 AudioStreamPlayer 的测试通过；AudioEffectRecord 在 headless 环境对 OGG 输出不稳定，因此不能替代实体扬声器试听。
 - Keychain 中有效代码签名身份数为 0，Developer ID Application 身份数为 0；当前 macOS 包只有 ad-hoc 签名且未 notarize。
 - 音量调整后 Web/macOS 均重新导出，当前包哈希见 `docs/release_manifest.md`。
+
+### 标题页与暂停菜单（2026-10-01）
+
+- 项目入口改为 `res://scenes/title_screen.tscn`；标题按钮与 Enter 均能进入 `main.tscn`。
+- 主场景根节点以 Always 模式处理暂停输入，Playfield/HUD/Audio 以 Pausable 模式冻结；PauseOverlay 使用 Always 保持按钮和滑块可操作。
+- Escape/P 切换暂停；继续、暂停重开、返回标题均已自动化验证；暂停期间倒计时不变。
+- Master Slider 使用 `AudioServer.set_bus_volume_linear`，通过 `ConfigFile` 保存到 `user://settings.cfg`。
+- 浏览器截图确认标题说明与暂停面板布局；Web Console 无错误。
+- 为 R 重开调整输入处理顺序，避免场景卸载后访问旧 Viewport。

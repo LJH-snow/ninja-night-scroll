@@ -16,6 +16,8 @@ Enter a small enemy-held map, collect three scrolls, and reach the exit before t
 
 - `WASD` / Arrow Keys: Move
 - `Space`: Attack
+- `Esc` / `P`: Pause or resume
+- Master volume: Adjust in the pause menu
 - `R`: Restart after victory or defeat
 
 ## 标签建议
@@ -34,6 +36,8 @@ Enter a small enemy-held map, collect three scrolls, and reach the exit before t
 - 截图：`output/playwright/restart-immediate.png`。
 - 截图 2：`output/playwright/web-movement-check.png`。
 - 截图 3：`output/playwright/web-attack-check.png`。
+- 标题页：`output/playwright/title-screen.png`。
+- 暂停菜单：`output/playwright/pause-menu.png`。
 
 ## 上传包
 

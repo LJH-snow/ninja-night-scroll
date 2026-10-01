@@ -15,6 +15,10 @@
 - [x] 生成并校验 `release/ninja-night-scroll-web.zip`。
 - [x] 在真实 Chromium/WebGL 中打开 Web 包。
 - [x] Web 版实测方向键移动、Space 攻击、R 重开和中文 HUD。
+- [x] 新标题页显示操作说明，开始按钮与 Enter 均可进入关卡。
+- [x] 暂停菜单支持 Escape/P、继续、重开、返回标题。
+- [x] 暂停时游戏与倒计时冻结，音量滑块控制并保存 Master 音量。
+- [x] Web 实际画面确认标题页与暂停面板；浏览器控制台无错误。
 - [x] 生成 630×500 itch.io 封面和最终游戏截图。
 - [x] 导出 Universal macOS `.app` ZIP，并验证签名和无头启动。
 - [x] 将 Noto Sans SC 的 SIL OFL 1.1 许可证打入 Web/macOS 包。

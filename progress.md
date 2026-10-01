@@ -71,8 +71,8 @@
 
 ## 2026-10-01 发布候选复核
 
-- Web ZIP SHA-256：`6603e0dcbfb0b031c2ad6a6945f04ed8d11c130cf121316832bcbdf7bb10af40`；`unzip -t` 通过。
-- macOS Universal ZIP SHA-256：`ce9852ba20a011706d03ad5cf2c5b36f6a90d41db4e1bb098e89b86264afd3c3`；`codesign --verify --deep --strict` 与 app 无头启动通过。
+- Web ZIP SHA-256：`4a417a7b3b7281f1f6a0679b4ea33b02e7c0f6a728ed5cb88aafb3af4bacc8bf`；`unzip -t` 通过。
+- macOS Universal ZIP SHA-256：`8b3e6c5a3515b66139d94ab7aae3a194cca7bcd5154b955383e853959d94e813`；`codesign --verify --deep --strict` 与 app 无头启动通过。
 - 封面 `release/itch-cover.png` 为 630×500 PNG，SHA-256：`bc10624dcbcbc88791f9e23c25b7de766546d372f3d5ad8fec4d51e50f63260f`。
 - 复跑字体、阶段 3、4、5、重开和主场景测试均通过。
 - Chromium/WebGL 实测方向键移动、Space 攻击和 `R` 重开；浏览器采用静音模式，未声称已确认音量。
@@ -82,3 +82,13 @@
 
 - 用户可手动试听并上传 Web 包；如需上架 macOS 下载，需先配置 Developer ID Application 证书并完成 Apple notarization。
 - Git 改动仍未提交或推送。
+
+## 2026-10-01 标题页与暂停菜单
+
+- 新建 `scenes/title_screen.tscn` 和 `scripts/title_screen.gd`，设为 F5 默认入口；标题页显示角色、敌人和操作说明，开始按钮/Enter 进入关卡。
+- 主场景加入 Escape/P 暂停、继续/重开/返回标题；暂停时玩家、敌人、音乐和倒计时冻结，暂停面板仍可操作。
+- 新增 Master 音量滑块，控制 `AudioServer` Master 总线并保存到 `user://settings.cfg`；跨标题页重开测试通过。
+- Web 浏览器实测标题页、暂停面板和 Enter 开局，浏览器控制台无错误。
+- 修复 R 重开时场景切换后访问旧 Viewport 的运行时错误；重开回归无错误。
+- 阶段 3–8 的场景/行为冒烟测试与 Web/macOS 导出均通过。
+- 更新后的 Web/macOS 包哈希记录在 `docs/release_manifest.md`；尚未提交或推送此阶段改动。

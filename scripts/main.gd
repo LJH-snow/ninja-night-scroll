@@ -2,6 +2,7 @@ extends Node2D
 
 const SCROLL_TARGET := 3
 const GAME_DURATION := 180.0
+const SETTINGS_PATH := "user://settings.cfg"
 const CJK_FONT: Font = preload("res://assets/ui/NotoSansSC-Regular.ttf")
 
 @onready var player: NinjaPlayer = $Playfield/Player
@@ -19,14 +20,32 @@ const CJK_FONT: Font = preload("res://assets/ui/NotoSansSC-Regular.ttf")
 @onready var hurt_sfx: AudioStreamPlayer = $Audio/HurtSfx
 @onready var victory_sfx: AudioStreamPlayer = $Audio/VictorySfx
 @onready var flash_overlay: ColorRect = $HUD/FlashOverlay
+@onready var pause_overlay: ColorRect = $HUD/PauseOverlay
+@onready var resume_button: Button = $HUD/PauseOverlay/PausePanel/ResumeButton
+@onready var restart_button: Button = $HUD/PauseOverlay/PausePanel/RestartButton
+@onready var title_button: Button = $HUD/PauseOverlay/PausePanel/TitleButton
+@onready var master_volume_slider: HSlider = $HUD/PauseOverlay/PausePanel/MasterVolumeSlider
+@onready var master_volume_label: Label = $HUD/PauseOverlay/PausePanel/MasterVolumeLabel
 
 var scrolls_collected := 0
 var remaining_time: float = GAME_DURATION
 var game_over := false
+var is_paused := false
 var last_health := -1
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	$Playfield.process_mode = Node.PROCESS_MODE_PAUSABLE
+	$HUD.process_mode = Node.PROCESS_MODE_PAUSABLE
+	$Audio.process_mode = Node.PROCESS_MODE_PAUSABLE
+	pause_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
 	_configure_ui_font_fallback()
+	resume_button.pressed.connect(_resume_game)
+	restart_button.pressed.connect(_restart_game)
+	title_button.pressed.connect(_return_to_title)
+	master_volume_slider.value_changed.connect(_on_master_volume_changed)
+	master_volume_slider.set_value_no_signal(_load_master_volume())
+	_apply_master_volume(master_volume_slider.value)
 	player.health_changed.connect(_on_player_health_changed)
 	player.died.connect(_on_player_died)
 	player.attack_started.connect(_on_attack_started)
@@ -61,7 +80,7 @@ func _configure_ui_font_fallback() -> void:
 	pixel_font.fallbacks = [CJK_FONT]
 
 func _process(delta: float) -> void:
-	if game_over:
+	if game_over or is_paused:
 		return
 	remaining_time = maxf(remaining_time - delta, 0.0)
 	_update_timer_hud()
@@ -69,8 +88,18 @@ func _process(delta: float) -> void:
 		_finish_game(false, "时间到")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and _is_restart_key(event) and game_over:
-		get_tree().reload_current_scene()
+	if not event is InputEventKey or not event.pressed or event.echo:
+		return
+	if game_over and _is_restart_key(event):
+		get_viewport().set_input_as_handled()
+		_restart_game()
+		return
+	if not game_over and _is_pause_key(event):
+		if is_paused:
+			_resume_game()
+		else:
+			_pause_game()
+		get_viewport().set_input_as_handled()
 
 func _on_player_health_changed(current_health: int, maximum_health: int) -> void:
 	if last_health >= 0 and current_health < last_health:
@@ -121,6 +150,9 @@ func _finish_game(won: bool, message: String) -> void:
 	if game_over:
 		return
 	game_over = true
+	is_paused = false
+	get_tree().paused = false
+	pause_overlay.visible = false
 	music.stop()
 	result_overlay.visible = true
 	result_label.text = message
@@ -137,6 +169,51 @@ func _finish_game(won: bool, message: String) -> void:
 
 func _is_restart_key(event: InputEventKey) -> bool:
 	return event.keycode == KEY_R or event.physical_keycode == KEY_R
+
+func _is_pause_key(event: InputEventKey) -> bool:
+	return event.keycode == KEY_ESCAPE or event.keycode == KEY_P or event.physical_keycode == KEY_P
+
+func _pause_game() -> void:
+	if game_over or is_paused:
+		return
+	is_paused = true
+	pause_overlay.visible = true
+	get_tree().paused = true
+	resume_button.grab_focus()
+
+func _resume_game() -> void:
+	is_paused = false
+	get_tree().paused = false
+	pause_overlay.visible = false
+
+func _restart_game() -> void:
+	is_paused = false
+	get_tree().paused = false
+	get_tree().reload_current_scene()
+
+func _return_to_title() -> void:
+	is_paused = false
+	get_tree().paused = false
+	get_tree().change_scene_to_file("res://scenes/title_screen.tscn")
+
+func _load_master_volume() -> float:
+	var settings := ConfigFile.new()
+	if settings.load(SETTINGS_PATH) != OK:
+		return 1.0
+	return clampf(float(settings.get_value("audio", "master_volume", 1.0)), 0.0, 1.0)
+
+func _on_master_volume_changed(value: float) -> void:
+	_apply_master_volume(value)
+	var settings := ConfigFile.new()
+	settings.load(SETTINGS_PATH)
+	settings.set_value("audio", "master_volume", master_volume_slider.value)
+	settings.save(SETTINGS_PATH)
+
+func _apply_master_volume(value: float) -> void:
+	var master_bus := AudioServer.get_bus_index("Master")
+	if master_bus >= 0:
+		AudioServer.set_bus_volume_linear(master_bus, clampf(value, 0.0, 1.0))
+	master_volume_label.text = "总音量 %d%%" % roundi(clampf(value, 0.0, 1.0) * 100.0)
 
 func _flash_screen(color: Color) -> void:
 	flash_overlay.color = color
