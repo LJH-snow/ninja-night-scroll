@@ -50,6 +50,13 @@ func _run() -> void:
 	for scroll_name in ["ScrollPickupA", "ScrollPickupB", "ScrollPickupC"]:
 		(level_five.get_node(scroll_name) as Area2D).call("_on_body_entered", player)
 	main.call("_on_exit_entered")
+	_check(not main.game_over, "fifth exit stays locked while the boss is alive")
+	var boss: Node = level_five.get_node("FinalBoss")
+	for hit in range(int(boss.get("health"))):
+		boss.call("take_damage", 1)
+	await process_frame
+	_check(main.get("boss_defeated") == true, "fifth-level boss is defeated")
+	main.call("_on_exit_entered")
 	_check(main.game_over, "fifth exit completes the game")
 	_check(main.get_node("HUD/ResultOverlay/ResultLabel").text == "任务完成", "final victory appears after the fifth level")
 

@@ -159,3 +159,19 @@
 - 五关 Web ZIP 完整性检查与 macOS ad-hoc 签名、Universal 2、无头启动均通过；完整 Chromium 路线尚未抵达第五关。
 - 修复第二至第五关 `ObjectiveLabel` 未设置 `font_normal.ttf` CJK fallback 的问题；新增 `tests/ui_font_fallback_test.gd`，五个地图提示的中文 fallback 全部通过。
 - Web/macOS 候选包已重新导出并包含字体修复；Web 哈希为 `8ffb769c96cad832080fa063ec43da2b577895cdc9f40292094c6b06b38c9368`，macOS 哈希为 `70d0b3e107f54304397d614bba3b5755e3d3b2ea9ec9cb5df454b8d4251fe8ab`。
+
+## 2026-10-01 最终 Boss 开发开始
+
+- 用户要求先开发最终 Boss 和难度平衡。
+- 新增 `tests/final_boss_test.gd` 红测，覆盖 Boss 场景、第五关配置、Boss HUD、Boss 击败条件和最终出口结算。
+- 新增 `tests/difficulty_balance_test.gd` 红测，要求第一关敌人初始距离足够远，并验证开局三秒不会立即受到接触伤害。
+- 阶段 14 实现完成，Boss 红测和难度平衡红测均已转绿。
+
+## 2026-10-01 最终 Boss 与难度平衡
+
+- 新增 `scenes/final_boss.tscn` 和 `scripts/final_boss.gd`：8 点生命、保持距离、三发散射弹体和 Boss 击败信号。
+- 第五关加入最终 Boss；第五关出口在 Boss 存活时保持锁定，击败 Boss 且收集卷轴后才显示最终胜利。
+- HUD 新增最终 Boss 名称和生命条；Boss 只在第五关显示。
+- 第一关初始近战敌人移远，近战敌人速度/接触冷却和远程敌人速度/射击间隔调整，给玩家更长的开局反应窗口。
+- `tests/final_boss_test.gd` 与 `tests/difficulty_balance_test.gd` 通过；全量关卡、字体、死亡和远程战斗回归通过。
+- Web/macOS 候选包已重新导出并包含最终 Boss；Web 哈希为 `fcc5a97359d5ff71dfe9720786d2db1c84190aa0a2967db2f77775dc5116dc59`，macOS 哈希为 `05f9f1a677db0baaf78740cc894ba59afcd1be55802f93216a39de4848a9af2c`。

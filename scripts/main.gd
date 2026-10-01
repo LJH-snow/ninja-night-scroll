@@ -9,6 +9,9 @@ const CJK_FONT: Font = preload("res://assets/ui/NotoSansSC-Regular.ttf")
 @onready var timer_label: Label = $HUD/StatusPanel/TimerLabel
 @onready var health_label: Label = $HUD/StatusPanel/HealthLabel
 @onready var scroll_label: Label = $HUD/StatusPanel/ScrollLabel
+@onready var boss_panel: Panel = $HUD/BossPanel
+@onready var boss_name_label: Label = $HUD/BossPanel/BossNameLabel
+@onready var boss_health_bar: ProgressBar = $HUD/BossPanel/BossHealthBar
 @onready var playfield: Panel = $Playfield
 @onready var level_two: Panel = $LevelTwo
 @onready var level_three: Panel = $LevelThree
@@ -39,6 +42,7 @@ var is_paused := false
 var current_level_index := 1
 var current_level: Panel
 var last_health := -1
+var boss_defeated := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -53,6 +57,8 @@ func _ready() -> void:
 	level_five.visible = false
 	$HUD.process_mode = Node.PROCESS_MODE_PAUSABLE
 	$Audio.process_mode = Node.PROCESS_MODE_PAUSABLE
+	boss_panel.process_mode = Node.PROCESS_MODE_PAUSABLE
+	boss_panel.visible = false
 	pause_overlay.process_mode = Node.PROCESS_MODE_ALWAYS
 	current_level = playfield
 	_configure_ui_font_fallback()
@@ -72,7 +78,13 @@ func _ready() -> void:
 	for pickup_node in get_tree().get_nodes_in_group("scroll_pickups"):
 		var pickup: Area2D = pickup_node as Area2D
 		if pickup and pickup.has_signal("collected"):
-			pickup.connect("collected", Callable(self, "_on_scroll_collected"))
+				pickup.connect("collected", Callable(self, "_on_scroll_collected"))
+	for boss_node in get_tree().get_nodes_in_group("bosses"):
+		if boss_node.has_signal("health_changed"):
+			boss_node.connect("health_changed", Callable(self, "_on_boss_health_changed"))
+			_on_boss_health_changed(int(boss_node.get("health")), int(boss_node.get("max_health")))
+		if boss_node.has_signal("defeated"):
+			boss_node.connect("defeated", Callable(self, "_on_boss_defeated"))
 	_on_player_health_changed(player.health, player.max_health)
 	_update_scroll_hud()
 	_update_timer_hud()
@@ -144,6 +156,8 @@ func _on_exit_entered() -> void:
 	if scrolls_collected >= SCROLL_TARGET:
 		if current_level_index < 5:
 			_advance_to_next_level()
+		elif not boss_defeated:
+			objective_label.text = "先击败最终 Boss"
 		else:
 			_finish_game(true, "任务完成")
 	else:
@@ -185,12 +199,35 @@ func _on_scroll_collected() -> void:
 	_flash_screen(Color(0.95, 0.76, 0.3, 1.0))
 	_update_scroll_hud()
 
+func _on_boss_health_changed(current_health: int, maximum_health: int) -> void:
+	boss_health_bar.max_value = maximum_health
+	boss_health_bar.value = current_health
+	_update_boss_display()
+
+func _on_boss_defeated() -> void:
+	boss_defeated = true
+	boss_name_label.text = "最终 Boss 已击败"
+	_update_boss_display()
+	_update_scroll_hud()
+
 func _update_scroll_hud() -> void:
 	scroll_label.text = "卷轴 %d / %d" % [scrolls_collected, SCROLL_TARGET]
 	if scrolls_collected >= SCROLL_TARGET:
-		objective_label.text = "出口已解锁"
+		if current_level_index == 5 and not boss_defeated:
+			objective_label.text = "先击败最终 Boss"
+		else:
+			objective_label.text = "出口已解锁"
 	else:
 		objective_label.text = "还需收集 %d 个卷轴" % (SCROLL_TARGET - scrolls_collected)
+	_update_boss_display()
+
+func _update_boss_display() -> void:
+	if current_level_index != 5 or game_over:
+		boss_panel.visible = false
+		return
+	boss_panel.visible = true
+	if not boss_defeated:
+		boss_name_label.text = "最终 Boss · 星陨守将"
 
 func _update_timer_hud() -> void:
 	var total_seconds := maxi(int(ceil(remaining_time)), 0)
@@ -225,6 +262,7 @@ func _finish_game(won: bool, message: String) -> void:
 	player.set_process_unhandled_input(false)
 	get_tree().call_group("enemies", "set_physics_process", false)
 	get_tree().call_group("enemy_projectiles", "queue_free")
+	boss_panel.visible = false
 	if won:
 		_play_audio(victory_sfx)
 		_flash_screen(Color(0.95, 0.76, 0.3, 1.0))

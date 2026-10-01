@@ -1,11 +1,11 @@
 class_name ChasingEnemy
 extends CharacterBody2D
 
-@export var speed: float = 78.0
+@export var speed: float = 64.0
 @export var max_health: int = 2
 @export var contact_damage: int = 1
 @export var contact_distance: float = 22.0
-@export var contact_cooldown: float = 0.8
+@export var contact_cooldown: float = 0.9
 
 @onready var sprite: Sprite2D = $Sprite
 

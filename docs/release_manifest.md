@@ -8,9 +8,9 @@
 
 - 文件：`release/ninja-night-scroll-web.zip`
 - 内容：`index.html`、WASM、JavaScript、PCK、音频 worklet 和图标资源。
-- SHA-256：`8ffb769c96cad832080fa063ec43da2b577895cdc9f40292094c6b06b38c9368`
+- SHA-256：`fcc5a97359d5ff71dfe9720786d2db1c84190aa0a2967db2f77775dc5116dc59`
 - 校验：`unzip -t` 通过。
-- PCK：8,703,136 字节，含五张地图、远程敌人/弹体、Noto Sans SC 和 OFL 1.1；导出过滤掉 godot-ai 插件、测试脚本和发布文档。
+- PCK：8,709,888 字节，含五张地图、最终 Boss、远程敌人/弹体、Noto Sans SC 和 OFL 1.1；导出过滤掉 godot-ai 插件、测试脚本和发布文档。
 
 ## 运行验证
 
@@ -23,10 +23,10 @@
 
 - 文件：`release/macos/NinjaNightScroll.zip`
 - 架构：Universal 2（x86_64 + arm64）。
-- SHA-256：`70d0b3e107f54304397d614bba3b5755e3d3b2ea9ec9cb5df454b8d4251fe8ab`
+- SHA-256：`05f9f1a677db0baaf78740cc894ba59afcd1be55802f93216a39de4848a9af2c`
 - 校验：ZIP 可解压；`codesign --verify --deep --strict` 通过；Universal 2（x86_64 + arm64）可执行文件 `--headless --quit-after 30` 无错误启动。
 - 签名：ad-hoc；未使用 Developer ID，未 notarize。检查到 Keychain 中有 0 个有效签名身份、0 个 Developer ID Application 身份。
-- 当前包包含第五关、远程敌人与弹体；标题页、暂停流程和音量设置也已包含。
+- 当前包包含第五关、最终 Boss、远程敌人与弹体；标题页、暂停流程和音量设置也已包含。
 
 ## 音频检查
 

@@ -213,7 +213,7 @@ collision_mask = 1
 shape = SubResource("RectangleShape2D_vertical")
 
 [node name="Enemy" parent="Playfield" instance=ExtResource("2_enemy")]
-position = Vector2(736, 320)
+position = Vector2(760, 348)
 
 [node name="Player" parent="." instance=ExtResource("5_player")]
 position = Vector2(400, 282)
@@ -292,6 +292,33 @@ offset_top = 17.0
 offset_right = 402.0
 offset_bottom = 33.0
 texture = ExtResource("3_heart")
+
+[node name="BossPanel" type="Panel" parent="HUD"]
+offset_left = 32.0
+offset_top = 16.0
+offset_right = 432.0
+offset_bottom = 68.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+visible = false
+
+[node name="BossNameLabel" type="Label" parent="HUD/BossPanel"]
+offset_left = 14.0
+offset_top = 7.0
+offset_right = 208.0
+offset_bottom = 27.0
+theme_override_colors/font_color = Color(0.94902, 0.760784, 0.407843, 1)
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 13
+text = "最终 Boss · 星陨守将"
+
+[node name="BossHealthBar" type="ProgressBar" parent="HUD/BossPanel"]
+offset_left = 14.0
+offset_top = 29.0
+offset_right = 386.0
+offset_bottom = 44.0
+max_value = 8.0
+value = 8.0
+show_percentage = false
 
 [node name="FlashOverlay" type="ColorRect" parent="HUD"]
 offset_right = 960.0

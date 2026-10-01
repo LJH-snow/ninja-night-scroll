@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/ranged_enemy.tscn" id="2_ranged_enemy"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/props/crate.png" id="6_crate"]
 [ext_resource type="Texture2D" path="res://assets/props/pot.png" id="7_pot"]
 [ext_resource type="FontFile" path="res://assets/ui/font_normal.ttf" id="8_font"]
+[ext_resource type="PackedScene" path="res://scenes/final_boss.tscn" id="9_final_boss"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_five"]
 bg_color = Color(0.160784, 0.117647, 0.172549, 1)
@@ -173,6 +174,9 @@ position = Vector2(210, 70)
 
 [node name="RangedEnemyB" parent="." instance=ExtResource("2_ranged_enemy")]
 position = Vector2(606, 70)
+
+[node name="FinalBoss" parent="." instance=ExtResource("9_final_boss")]
+position = Vector2(408, 120)
 
 [node name="ScrollPickupA" parent="." instance=ExtResource("3_scroll")]
 position = Vector2(150, 300)
