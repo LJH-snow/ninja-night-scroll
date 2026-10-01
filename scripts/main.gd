@@ -261,7 +261,9 @@ func _finish_game(won: bool, message: String) -> void:
 	player.set_physics_process(false)
 	player.set_process_unhandled_input(false)
 	get_tree().call_group("enemies", "set_physics_process", false)
-	get_tree().call_group("enemy_projectiles", "queue_free")
+	for projectile in get_tree().get_nodes_in_group("enemy_projectiles"):
+		if is_instance_valid(projectile):
+			projectile.call_deferred("queue_free")
 	boss_panel.visible = false
 	if won:
 		_play_audio(victory_sfx)

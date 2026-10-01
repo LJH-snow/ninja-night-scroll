@@ -23,9 +23,13 @@ func _physics_process(delta: float) -> void:
 	global_position += direction * speed * delta
 	lifetime_left -= delta
 	if lifetime_left <= 0.0:
-		queue_free()
+		_defer_free()
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.has_method("take_damage"):
 		body.call("take_damage", damage)
-	queue_free()
+	_defer_free()
+
+func _defer_free() -> void:
+	if not is_queued_for_deletion():
+		call_deferred("queue_free")

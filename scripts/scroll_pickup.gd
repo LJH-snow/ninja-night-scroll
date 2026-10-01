@@ -14,4 +14,4 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	collected_once = true
 	collected.emit()
-	queue_free()
+	call_deferred("queue_free")

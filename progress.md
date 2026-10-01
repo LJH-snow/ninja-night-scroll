@@ -175,3 +175,5 @@
 - 第一关初始近战敌人移远，近战敌人速度/接触冷却和远程敌人速度/射击间隔调整，给玩家更长的开局反应窗口。
 - `tests/final_boss_test.gd` 与 `tests/difficulty_balance_test.gd` 通过；全量关卡、字体、死亡和远程战斗回归通过。
 - Web/macOS 候选包已重新导出并包含最终 Boss；Web 哈希为 `fcc5a97359d5ff71dfe9720786d2db1c84190aa0a2967db2f77775dc5116dc59`，macOS 哈希为 `05f9f1a677db0baaf78740cc894ba59afcd1be55802f93216a39de4848a9af2c`。
+- 浏览器五关实测进入第二关，当前 Web 控制台错误为 0；玩家在第二关战斗中耗尽生命，完整五关路线尚未完成。
+- 将敌人、拾取物、投射物和结算阶段的物理节点释放统一改为延迟执行，重新导出包；最新 Web 哈希为 `b7be88f8a57d447665d6cf2b9d3a97ec5ad7bf826bb74df87aaf53f285a01773`，macOS 哈希为 `b6fedefa7f8a2630b1e921258dd4e303dce7c1be46c068b01e7c504251e2fc69`。

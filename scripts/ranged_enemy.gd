@@ -64,7 +64,7 @@ func take_damage(amount: int) -> bool:
 		return false
 	health = maxi(health - amount, 0)
 	if health == 0:
-		queue_free()
+		call_deferred("queue_free")
 	else:
 		sprite.modulate = Color(1.0, 0.55, 0.55, 1.0)
 		get_tree().create_timer(0.12).timeout.connect(_clear_hit_flash)
