@@ -44,5 +44,5 @@
 
 ## 上传边界
 
-- 最终包已准备好，但没有自动上传 itch.io。
-- 上传时选择 `release/ninja-night-scroll-web.zip`，并按 `docs/itch_page_draft.md` 填写页面。
+- 最终 Web 包已上传并公开发布：`https://ljh-snow.itch.io/ninja-night-scroll`。
+- 用户确认其他电脑无需登录即可运行游戏、声音正常，并完成第五关胜利流程。
