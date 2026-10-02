@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/ranged_enemy.tscn" id="2_ranged_enemy"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/props/crate.png" id="6_crate"]
 [ext_resource type="Texture2D" path="res://assets/props/pot.png" id="7_pot"]
 [ext_resource type="FontFile" path="res://assets/ui/font_normal.ttf" id="8_font"]
+[ext_resource type="PackedScene" path="res://scenes/health_pickup.tscn" id="9_health_pickup"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_three"]
 bg_color = Color(0.105882, 0.180392, 0.172549, 1)
@@ -162,6 +163,9 @@ position = Vector2(348, 110)
 
 [node name="ScrollPickupC" parent="." instance=ExtResource("3_scroll")]
 position = Vector2(450, 204)
+
+[node name="HealthPickup" parent="." instance=ExtResource("9_health_pickup")]
+position = Vector2(570, 320)
 
 [node name="BoundaryTop" type="StaticBody2D" parent="."]
 position = Vector2(408, 4)

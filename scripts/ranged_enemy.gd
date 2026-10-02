@@ -2,12 +2,12 @@ extends CharacterBody2D
 
 const PROJECTILE_SCENE: PackedScene = preload("res://scenes/enemy_projectile.tscn")
 
-@export var speed: float = 58.0
+@export var speed: float = 42.0
 @export var max_health: int = 2
 @export var preferred_distance: float = 150.0
 @export var distance_tolerance: float = 18.0
 @export var attack_range: float = 310.0
-@export var fire_interval: float = 1.45
+@export var fire_interval: float = 2.1
 @export var projectile_scene: PackedScene = PROJECTILE_SCENE
 
 @onready var sprite: Sprite2D = $Sprite
@@ -15,6 +15,7 @@ const PROJECTILE_SCENE: PackedScene = preload("res://scenes/enemy_projectile.tsc
 var health: int = 0
 var target: Node2D
 var fire_cooldown_left := 0.65
+var knockback_velocity := Vector2.ZERO
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -24,6 +25,11 @@ func _ready() -> void:
 	sprite.modulate = Color(0.68, 0.76, 1.0, 1.0)
 
 func _physics_process(delta: float) -> void:
+	if knockback_velocity.length_squared() > 1.0:
+		velocity = knockback_velocity
+		move_and_slide()
+		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 520.0 * delta)
+		return
 	if not is_instance_valid(target):
 		target = _find_player()
 	if not is_instance_valid(target) or _target_is_dead():
@@ -69,6 +75,9 @@ func take_damage(amount: int) -> bool:
 		sprite.modulate = Color(1.0, 0.55, 0.55, 1.0)
 		get_tree().create_timer(0.12).timeout.connect(_clear_hit_flash)
 	return true
+
+func apply_knockback(direction: Vector2, strength: float) -> void:
+	knockback_velocity = direction.normalized() * strength
 
 func _clear_hit_flash() -> void:
 	if is_instance_valid(sprite):

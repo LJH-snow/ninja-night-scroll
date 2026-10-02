@@ -4,6 +4,7 @@ const SCROLL_TARGET := 3
 const GAME_DURATION := 180.0
 const SETTINGS_PATH := "user://settings.cfg"
 const CJK_FONT: Font = preload("res://assets/ui/NotoSansSC-Regular.ttf")
+const WEB_PLAYTEST_BRIDGE: Script = preload("res://scripts/web_playtest_bridge.gd")
 
 @onready var player: NinjaPlayer = $Player
 @onready var timer_label: Label = $HUD/StatusPanel/TimerLabel
@@ -71,14 +72,18 @@ func _ready() -> void:
 	player.health_changed.connect(_on_player_health_changed)
 	player.died.connect(_on_player_died)
 	player.attack_started.connect(_on_attack_started)
+	player.shuriken_started.connect(_on_attack_started)
 	for level in [playfield, level_two, level_three, level_four, level_five]:
 		var level_exit: Area2D = level.get_node("ExitZone") as Area2D
-		level_exit.connect("player_entered", Callable(self, "_on_exit_entered"))
+		level_exit.connect("player_entered", Callable(self, "_on_exit_entered"), CONNECT_DEFERRED)
 	music.finished.connect(_on_music_finished)
 	for pickup_node in get_tree().get_nodes_in_group("scroll_pickups"):
 		var pickup: Area2D = pickup_node as Area2D
 		if pickup and pickup.has_signal("collected"):
 				pickup.connect("collected", Callable(self, "_on_scroll_collected"))
+	for health_node in get_tree().get_nodes_in_group("health_pickups"):
+		if health_node.has_signal("collected"):
+			health_node.connect("collected", Callable(self, "_on_health_collected"))
 	for boss_node in get_tree().get_nodes_in_group("bosses"):
 		if boss_node.has_signal("health_changed"):
 			boss_node.connect("health_changed", Callable(self, "_on_boss_health_changed"))
@@ -90,6 +95,10 @@ func _ready() -> void:
 	_update_timer_hud()
 	_update_level_display()
 	_play_audio(music)
+	if WEB_PLAYTEST_BRIDGE.is_autoplay_requested():
+		var playtest_bridge: Node = WEB_PLAYTEST_BRIDGE.new()
+		playtest_bridge.name = "WebPlaytestBridge"
+		add_child(playtest_bridge)
 
 func _exit_tree() -> void:
 	if is_instance_valid(music):
@@ -190,14 +199,30 @@ func _advance_to_next_level() -> void:
 	else:
 		player.global_position = (level_five.get_node("SpawnPoint") as Marker2D).global_position
 	player.facing_direction = Vector2.RIGHT
+	_refresh_active_level_pickup_overlaps.call_deferred()
 	_update_scroll_hud()
 	_update_level_display()
+
+func _refresh_active_level_pickup_overlaps() -> void:
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	for pickup_group in ["scroll_pickups", "health_pickups"]:
+		for pickup_node in get_tree().get_nodes_in_group(pickup_group):
+			if current_level.is_ancestor_of(pickup_node):
+				var pickup_area := pickup_node as Area2D
+				pickup_area.monitoring = false
+				pickup_area.monitoring = true
 
 func _on_scroll_collected() -> void:
 	scrolls_collected = min(scrolls_collected + 1, SCROLL_TARGET)
 	_play_audio(pickup_sfx)
 	_flash_screen(Color(0.95, 0.76, 0.3, 1.0))
 	_update_scroll_hud()
+
+func _on_health_collected() -> void:
+	_play_audio(pickup_sfx)
+	_flash_screen(Color(0.35, 0.95, 0.45, 1.0))
 
 func _on_boss_health_changed(current_health: int, maximum_health: int) -> void:
 	boss_health_bar.max_value = maximum_health
@@ -224,8 +249,10 @@ func _update_scroll_hud() -> void:
 func _update_boss_display() -> void:
 	if current_level_index != 5 or game_over:
 		boss_panel.visible = false
+		$Hint.visible = true
 		return
 	boss_panel.visible = true
+	$Hint.visible = false
 	if not boss_defeated:
 		boss_name_label.text = "最终 Boss · 星陨守将"
 
@@ -254,6 +281,7 @@ func _finish_game(won: bool, message: String) -> void:
 	is_paused = false
 	get_tree().paused = false
 	pause_overlay.visible = false
+	$Hint.visible = true
 	music.stop()
 	result_overlay.visible = true
 	result_label.text = message
@@ -262,6 +290,9 @@ func _finish_game(won: bool, message: String) -> void:
 	player.set_process_unhandled_input(false)
 	get_tree().call_group("enemies", "set_physics_process", false)
 	for projectile in get_tree().get_nodes_in_group("enemy_projectiles"):
+		if is_instance_valid(projectile):
+			projectile.call_deferred("queue_free")
+	for projectile in get_tree().get_nodes_in_group("player_projectiles"):
 		if is_instance_valid(projectile):
 			projectile.call_deferred("queue_free")
 	boss_panel.visible = false

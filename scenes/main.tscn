@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="2_enemy"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" path="res://scenes/level_three.tscn" id="17_level_three"]
 [ext_resource type="PackedScene" path="res://scenes/level_four.tscn" id="18_level_four"]
 [ext_resource type="PackedScene" path="res://scenes/level_five.tscn" id="19_level_five"]
+[ext_resource type="PackedScene" path="res://scenes/health_pickup.tscn" id="20_health_pickup"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_playfield"]
 bg_color = Color(0.105882, 0.2, 0.145098, 1)
@@ -227,6 +228,9 @@ position = Vector2(648, 288)
 [node name="ScrollPickupC" parent="Playfield" instance=ExtResource("6_scroll")]
 position = Vector2(416, 304)
 
+[node name="HealthPickup" parent="Playfield" instance=ExtResource("20_health_pickup")]
+position = Vector2(300, 280)
+
 [node name="Title" type="Label" parent="."]
 offset_left = 32.0
 offset_top = 20.0
@@ -294,10 +298,10 @@ offset_bottom = 33.0
 texture = ExtResource("3_heart")
 
 [node name="BossPanel" type="Panel" parent="HUD"]
-offset_left = 32.0
-offset_top = 16.0
-offset_right = 432.0
-offset_bottom = 68.0
+offset_left = 280.0
+offset_top = 476.0
+offset_right = 680.0
+offset_bottom = 528.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
 visible = false
 

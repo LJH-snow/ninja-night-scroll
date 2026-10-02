@@ -90,7 +90,7 @@ func _test_game_over_clears_projectiles() -> void:
 	projectile.call("launch", Vector2(300.0, 200.0), Vector2.RIGHT)
 	main.call("_finish_game", false, "测试结束")
 	await process_frame
-	_check(projectile.is_queued_for_deletion(), "game over clears active enemy projectiles")
+	_check(not is_instance_valid(projectile) or projectile.is_queued_for_deletion(), "game over clears active enemy projectiles")
 	main.queue_free()
 	await process_frame
 

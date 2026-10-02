@@ -13,9 +13,9 @@ func _run() -> void:
 	var player: Node2D = main.get_node("Player")
 	var enemy: Node2D = main.get_node("Playfield/Enemy")
 	_check(enemy.global_position.distance_to(player.global_position) > 450.0, "opening enemy starts at a safe distance")
-	for frame in range(180):
+	for frame in range(720):
 		await physics_frame
-	_check(int(player.get("health")) == 3, "player survives three seconds without immediate contact damage")
+	_check(int(player.get("health")) == 3, "player has a twelve-second safe window to learn controls")
 
 	main.queue_free()
 	await process_frame

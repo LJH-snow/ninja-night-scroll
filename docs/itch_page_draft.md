@@ -6,11 +6,11 @@
 
 ## 简介
 
-闯过五张相连地图，每关收集 3 个卷轴并抵达出口；五关共用 3 分钟和同一条生命值。第五关有最终 Boss，必须击败它才能逃脱。近战敌人会追踪你，远程敌人会拉开距离发射弹体。灵活走位躲避攻击，再用近战反击完成逃脱。
+闯过五张相连地图，每关收集 3 个卷轴并抵达出口；五关共用 3 分钟和同一条生命值。第五关有最终 Boss，必须击败它才能逃脱。用短剑击退近战敌人，或投掷手里剑攻击远处目标，并寻找绿色补给恢复生命。
 
 ## English Summary
 
-Fight through five connected maps, collecting three scrolls on each before reaching the exit. The fifth stage has a final boss that must be defeated before escape. All stages share one three-minute timer and health bar. Dodge the chasing and ranged enemies, then fight back with close-range attacks.
+Fight through five connected maps, collecting three scrolls on each before reaching the exit. The fifth stage has a final boss that must be defeated before escape. Use sword knockback, shurikens, and green health pickups to survive close and ranged enemies.
 
 ## 操作
 
@@ -41,7 +41,7 @@ Fight through five connected maps, collecting three scrolls on each before reach
 
 ## 上传包
 
-- 推荐先上传 `release/ninja-night-scroll-web.zip`，平台选择 HTML。
+- 推荐先上传最终包 `release/ninja-night-scroll-web.zip`，平台选择 HTML。
 - `release/macos/NinjaNightScroll.zip` 当前为 ad-hoc 签名且未 notarize；完成 Apple Developer ID 签名和 notarization 后再作为正式 macOS 下载提供。
 
 ## 授权说明

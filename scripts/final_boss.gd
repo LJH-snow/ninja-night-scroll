@@ -7,13 +7,14 @@ signal health_changed(current_health, maximum_health)
 signal defeated
 
 @export var speed: float = 48.0
-@export var max_health: int = 8
+@export var max_health: int = 6
 @export var preferred_distance: float = 180.0
 @export var distance_tolerance: float = 24.0
 @export var attack_range: float = 360.0
-@export var fire_interval: float = 1.7
+@export var fire_interval: float = 2.8
 @export var burst_projectile_count: int = 3
 @export var burst_spread: float = 0.24
+@export var burst_projectile_speed: float = 185.0
 @export var projectile_scene: PackedScene = PROJECTILE_SCENE
 
 @onready var sprite: Sprite2D = $Sprite
@@ -69,6 +70,7 @@ func _fire_burst(direction: Vector2) -> void:
 	for projectile_index in range(burst_projectile_count):
 		var angle_offset := (float(projectile_index) - center) * burst_spread
 		var projectile := projectile_scene.instantiate() as Area2D
+		projectile.set("speed", burst_projectile_speed)
 		get_parent().add_child(projectile)
 		projectile.call("launch", global_position + direction * 20.0, direction.rotated(angle_offset))
 

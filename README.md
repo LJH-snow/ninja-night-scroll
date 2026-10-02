@@ -1,11 +1,12 @@
 # 忍者夜行：三分钟夺卷
 
-一个使用 Godot 4.7 制作的俯视角 2D 小游戏。玩家控制忍者闯过五张相连地图，每关收集 3 个卷轴并抵达出口；五关共用 3 分钟和同一条生命值。第五关有最终 Boss，必须击败 Boss 后才能完成任务。敌人会追击或保持距离发射弹体，玩家可以躲避弹体并用近战反击。
+一个使用 Godot 4.7 制作的俯视角 2D 小游戏。玩家控制忍者闯过五张相连地图，每关收集 3 个卷轴并抵达出口；五关共用 3 分钟和同一条生命值。第五关有最终 Boss，必须击败 Boss 后才能完成任务。玩家可以用短剑击退敌人、发射手里剑攻击远处目标，并在地图中寻找绿色回血补给。
 
 ## 操作
 
 - `WASD` 或方向键：移动
 - `Space`：攻击
+- `Shift`：发射手里剑
 - `Esc` / `P`：暂停或继续
 - 暂停菜单中的滑块：调节并保存总音量
 - `R`：胜利或失败后重新开始
@@ -38,12 +39,13 @@ macOS 包当前为 ad-hoc 签名，尚未 Developer ID 签名或 notarize；本�
 
 # Ninja Night Scroll: Three-Minute Escape
 
-A top-down 2D action game made with Godot 4.7. Guide a ninja through five connected maps, collect three scrolls on each map, and reach the exit. All five stages share one three-minute timer and one health bar. Chasing enemies and ranged enemies will attack you, so keep moving, dodge projectiles, and fight back with close-range attacks.
+A top-down 2D action game made with Godot 4.7. Guide a ninja through five connected maps, collect three scrolls on each map, and reach the exit. All five stages share one three-minute timer and one health bar. Use sword knockback, shurikens, and green health pickups to survive chasing and ranged enemies before facing the final boss.
 
 ## Controls
 
 - `WASD` or Arrow Keys: Move
-- `Space`: Attack
+- `Space`: Sword attack and knockback
+- `Shift`: Throw shuriken
 - `Esc` / `P`: Pause or resume
 - Pause menu slider: Adjust and save the master volume
 - `R`: Restart after victory or defeat
@@ -56,7 +58,7 @@ A top-down 2D action game made with Godot 4.7. Guide a ninja through five connec
 
 ## Project Structure
 
-- `scenes/`: Five maps, melee/ranged enemies, enemy projectiles, the player, scrolls, and exits.
+- `scenes/`: Five maps, melee/ranged enemies, enemy projectiles, the player, scrolls, health pickups, and exits.
 - `scenes/title_screen.tscn`: Title screen, character showcase, and controls.
 - `scripts/`: Movement, combat, enemies, pickups, countdown, and result logic.
 - `assets/`: Characters, maps, UI, fonts, audio, and decorations.
@@ -64,7 +66,7 @@ A top-down 2D action game made with Godot 4.7. Guide a ninja through five connec
 
 ## Release Status
 
-Stage 13, including the fifth stage and five-map progression, is complete. Web and macOS release candidates have been regenerated:
+Stage 16, including the final boss, combat balancing, health pickups, and five-map progression, is complete. Web and macOS release candidates have been regenerated:
 
 - itch.io Web build: `release/ninja-night-scroll-web.zip`
 - Universal 2 macOS build: `release/macos/NinjaNightScroll.zip`

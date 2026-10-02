@@ -28,9 +28,12 @@
 - [x] 阶段 13 headless 行为测试覆盖五关切换、第五关入口、卷轴重置和最终胜利。
 - [x] 第一至第五关出口提示统一使用中文字体 fallback，中文缺字回归通过。
 - [x] 第五关最终 Boss、Boss 血条、Boss 击败条件和开局安全距离回归通过。
+- [x] 短剑攻击距离、击退、普通敌人生命值和手里剑远程攻击回归通过。
+- [x] 五张地图加入回血补给点，回血上限和重复拾取保护回归通过。
 - [x] Chromium 死亡流程复测通过；修复死亡帧碰撞监测错误，控制台错误为 0。
 - [x] Web/macOS 重新导出并通过 ZIP 完整性检查，macOS 签名与 Universal 2 启动验证通过。
 - [x] Web 实际画面确认标题页与暂停面板；浏览器控制台无错误。
+- [x] Web-only `playtest=autoplay` 桥接在真实 Web 导出中自动完成五关并记录逐关遥测。
 - [x] 生成 630×500 itch.io 封面和最终游戏截图。
 - [x] 导出 Universal macOS `.app` ZIP，并验证签名和无头启动。
 - [x] 将 Noto Sans SC 的 SIL OFL 1.1 许可证打入 Web/macOS 包。

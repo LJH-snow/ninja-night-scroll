@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/enemy.tscn" id="1_enemy"]
 [ext_resource type="PackedScene" path="res://scenes/scroll_pickup.tscn" id="2_scroll"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" path="res://assets/props/pot.png" id="5_pot"]
 [ext_resource type="Texture2D" path="res://assets/props/grass.png" id="6_grass"]
 [ext_resource type="FontFile" path="res://assets/ui/font_normal.ttf" id="7_font"]
+[ext_resource type="PackedScene" path="res://scenes/health_pickup.tscn" id="8_health_pickup"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_two"]
 bg_color = Color(0.137255, 0.207843, 0.239216, 1)
@@ -165,6 +166,9 @@ position = Vector2(480, 188)
 
 [node name="ScrollPickupC" parent="." instance=ExtResource("2_scroll")]
 position = Vector2(720, 306)
+
+[node name="HealthPickup" parent="." instance=ExtResource("8_health_pickup")]
+position = Vector2(150, 320)
 
 [node name="BoundaryTop" type="StaticBody2D" parent="."]
 position = Vector2(408, 4)

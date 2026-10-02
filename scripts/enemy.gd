@@ -1,17 +1,18 @@
 class_name ChasingEnemy
 extends CharacterBody2D
 
-@export var speed: float = 64.0
-@export var max_health: int = 2
+@export var speed: float = 28.0
+@export var max_health: int = 1
 @export var contact_damage: int = 1
 @export var contact_distance: float = 22.0
-@export var contact_cooldown: float = 0.9
+@export var contact_cooldown: float = 1.5
 
 @onready var sprite: Sprite2D = $Sprite
 
 var health: int = 0
 var target: NinjaPlayer
 var contact_cooldown_left := 0.0
+var knockback_velocity := Vector2.ZERO
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -20,6 +21,11 @@ func _ready() -> void:
 	target = get_tree().get_first_node_in_group("player") as NinjaPlayer
 
 func _physics_process(delta: float) -> void:
+	if knockback_velocity.length_squared() > 1.0:
+		velocity = knockback_velocity
+		move_and_slide()
+		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 520.0 * delta)
+		return
 	contact_cooldown_left = maxf(contact_cooldown_left - delta, 0.0)
 	if not is_instance_valid(target):
 		target = get_tree().get_first_node_in_group("player") as NinjaPlayer
@@ -47,6 +53,9 @@ func take_damage(amount: int) -> bool:
 		sprite.modulate = Color(1.0, 0.55, 0.55, 1.0)
 		get_tree().create_timer(0.12).timeout.connect(_clear_hit_flash)
 	return true
+
+func apply_knockback(direction: Vector2, strength: float) -> void:
+	knockback_velocity = direction.normalized() * strength
 
 func _clear_hit_flash() -> void:
 	if is_instance_valid(sprite):

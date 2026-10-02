@@ -14,6 +14,8 @@ func _run() -> void:
 
 	var level_five: Node = load("res://scenes/level_five.tscn").instantiate()
 	_check(level_five.has_node("FinalBoss"), "fifth map contains the final boss")
+	_check(level_five.has_node("HealthPickupB"), "fifth map contains a backup health pickup")
+	_check(not level_five.has_node("EnemyB") and not level_five.has_node("RangedEnemyB"), "final arena avoids stacking duplicate regular enemies with the boss")
 	level_five.free()
 
 	var main: Node2D = load("res://scenes/main.tscn").instantiate()
@@ -27,8 +29,17 @@ func _run() -> void:
 		main.call("_on_exit_entered")
 	var boss: Node = main.get_node("LevelFive/FinalBoss")
 	_check(main.get("boss_defeated") == false, "final boss starts undefeated")
-	_check(int(boss.get("max_health")) >= 8, "final boss has a larger health pool")
+	_check(int(boss.get("max_health")) >= 6, "final boss has a larger health pool")
+	_check(float(boss.get("fire_interval")) >= 2.5, "final boss gives players time between volleys")
+	_check(float(boss.get("burst_projectile_speed")) <= 190.0, "final boss projectiles leave room to dodge")
 	_check(main.get_node("HUD/BossPanel").visible, "boss health panel appears in the fifth level")
+	var boss_panel: Control = main.get_node("HUD/BossPanel") as Control
+	var playfield: Control = main.get_node("Playfield") as Control
+	_check(not boss_panel.get_global_rect().intersects(playfield.get_global_rect()), "boss health panel stays outside the map")
+	var title: Control = main.get_node("Title") as Control
+	_check(not boss_panel.get_global_rect().intersects(title.get_global_rect()), "boss health panel does not cover the title")
+	_check(not main.get_node("Hint").visible, "control hint hides while the boss panel uses the footer")
+	_check(boss_panel.position.y >= main.get_node("Playfield").position.y + main.get_node("Playfield").size.y, "boss health panel stays below the playfield")
 
 	main.scrolls_collected = 3
 	main.call("_on_exit_entered")
