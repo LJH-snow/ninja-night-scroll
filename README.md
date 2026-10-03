@@ -1,3 +1,44 @@
+# Ninja Night Scroll: Three-Minute Escape
+
+A top-down 2D action game made with Godot 4.7. Guide a ninja through five connected maps, collect three scrolls on each map, and reach the exit. All five stages share one three-minute timer and one health bar. Use sword knockback, shurikens, and green health pickups to survive chasing and ranged enemies before facing the final boss.
+
+## Controls
+
+- `WASD` or Arrow Keys: Move
+- `Space`: Sword attack and knockback
+- `Shift`: Throw shuriken
+- `Esc` / `P`: Pause or resume
+- Pause menu slider: Adjust and save the master volume
+- `R`: Restart after victory or defeat
+
+## Running
+
+1. Open the project with Godot 4.7.x.
+2. Press F5 to run the project; the title screen displays the controls first.
+3. If using the embedded editor game window, switch the top toolbar to `输入` (Input) mode and click the game view.
+
+## Project Structure
+
+- `scenes/`: Five maps, melee/ranged enemies, enemy projectiles, the player, scrolls, health pickups, and exits.
+- `scenes/title_screen.tscn`: Title screen, character showcase, and controls.
+- `scripts/`: Movement, combat, enemies, pickups, countdown, and result logic.
+- `assets/`: Characters, maps, UI, fonts, audio, and decorations.
+- `docs/`: Game plan, release checklist, itch.io copy, and license records.
+
+## Release Status
+
+The game is published on itch.io: <https://ljh-snow.itch.io/ninja-night-scroll>
+
+- itch.io Web build: `release/ninja-night-scroll-web.zip`
+- Universal 2 macOS build: `release/macos/NinjaNightScroll.zip`
+- Page cover: `release/itch-cover.png`
+- 15 Godot tests pass, and the Web autoplay bridge completes all five levels.
+
+The macOS build is ad-hoc signed and has not been signed with Developer ID or notarized.
+See `docs/asset_licenses.md` for the asset and font license records.
+
+---
+
 # 忍者夜行：三分钟夺卷
 
 一个使用 Godot 4.7 制作的俯视角 2D 小游戏。玩家控制忍者闯过五张相连地图，每关收集 3 个卷轴并抵达出口；五关共用 3 分钟和同一条生命值。第五关有最终 Boss，必须击败 Boss 后才能完成任务。玩家可以用短剑击退敌人、发射手里剑攻击远处目标，并在地图中寻找绿色回血补给。
@@ -36,42 +77,3 @@
 macOS 包当前为 ad-hoc 签名，尚未 Developer ID 签名或 notarize；本机 Keychain 未检测到 Developer ID Application 身份。项目尚未自动上传 itch.io。
 
 素材和字体授权记录见 `docs/asset_licenses.md`。
-
-# Ninja Night Scroll: Three-Minute Escape
-
-A top-down 2D action game made with Godot 4.7. Guide a ninja through five connected maps, collect three scrolls on each map, and reach the exit. All five stages share one three-minute timer and one health bar. Use sword knockback, shurikens, and green health pickups to survive chasing and ranged enemies before facing the final boss.
-
-## Controls
-
-- `WASD` or Arrow Keys: Move
-- `Space`: Sword attack and knockback
-- `Shift`: Throw shuriken
-- `Esc` / `P`: Pause or resume
-- Pause menu slider: Adjust and save the master volume
-- `R`: Restart after victory or defeat
-
-## Running
-
-1. Open the project with Godot 4.7.x.
-2. Press F5 to run the project; the title screen displays the controls first.
-3. If using the embedded editor game window, switch the top toolbar to `输入` (Input) mode and click the game view.
-
-## Project Structure
-
-- `scenes/`: Five maps, melee/ranged enemies, enemy projectiles, the player, scrolls, health pickups, and exits.
-- `scenes/title_screen.tscn`: Title screen, character showcase, and controls.
-- `scripts/`: Movement, combat, enemies, pickups, countdown, and result logic.
-- `assets/`: Characters, maps, UI, fonts, audio, and decorations.
-- `docs/`: Game plan, release checklist, itch.io copy, and license records.
-
-## Release Status
-
-Stage 16, including the final boss, combat balancing, health pickups, and five-map progression, is complete. Web and macOS release candidates have been regenerated:
-
-- itch.io Web build: `release/ninja-night-scroll-web.zip`
-- Universal 2 macOS build: `release/macos/NinjaNightScroll.zip`
-- Page cover: `release/itch-cover.png`
-
-The macOS build is ad-hoc signed and has not been signed with Developer ID or notarized. No Developer ID Application identity is available in the local Keychain, and the project has not been uploaded to itch.io automatically.
-
-See `docs/asset_licenses.md` for the asset and font license records.
