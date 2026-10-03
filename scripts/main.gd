@@ -3,6 +3,9 @@ extends Node2D
 const SCROLL_TARGET := 3
 const GAME_DURATION := 180.0
 const SETTINGS_PATH := "user://settings.cfg"
+const SCREEN_SHAKE_DECAY := 7.0
+const SCREEN_SHAKE_PIXELS := 9.0
+const VOLUME_SAVE_DELAY := 0.4
 const CJK_FONT: Font = preload("res://assets/ui/NotoSansSC-Regular.ttf")
 const WEB_PLAYTEST_BRIDGE: Script = preload("res://scripts/web_playtest_bridge.gd")
 
@@ -35,6 +38,7 @@ const WEB_PLAYTEST_BRIDGE: Script = preload("res://scripts/web_playtest_bridge.g
 @onready var title_button: Button = $HUD/PauseOverlay/PausePanel/TitleButton
 @onready var master_volume_slider: HSlider = $HUD/PauseOverlay/PausePanel/MasterVolumeSlider
 @onready var master_volume_label: Label = $HUD/PauseOverlay/PausePanel/MasterVolumeLabel
+@onready var camera: Camera2D = $Camera
 
 var scrolls_collected := 0
 var remaining_time: float = GAME_DURATION
@@ -44,6 +48,8 @@ var current_level_index := 1
 var current_level: Panel
 var last_health := -1
 var boss_defeated := false
+var _shake_strength := 0.0
+var _volume_save_timer: Timer
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -69,10 +75,16 @@ func _ready() -> void:
 	master_volume_slider.value_changed.connect(_on_master_volume_changed)
 	master_volume_slider.set_value_no_signal(_load_master_volume())
 	_apply_master_volume(master_volume_slider.value)
+	_volume_save_timer = Timer.new()
+	_volume_save_timer.one_shot = true
+	_volume_save_timer.wait_time = VOLUME_SAVE_DELAY
+	_volume_save_timer.timeout.connect(_save_master_volume_settings)
+	add_child(_volume_save_timer)
 	player.health_changed.connect(_on_player_health_changed)
 	player.died.connect(_on_player_died)
 	player.attack_started.connect(_on_attack_started)
 	player.shuriken_started.connect(_on_attack_started)
+	player.attack_hit.connect(_on_player_attack_hit)
 	for level in [playfield, level_two, level_three, level_four, level_five]:
 		var level_exit: Area2D = level.get_node("ExitZone") as Area2D
 		level_exit.connect("player_entered", Callable(self, "_on_exit_entered"), CONNECT_DEFERRED)
@@ -101,6 +113,7 @@ func _ready() -> void:
 		add_child(playtest_bridge)
 
 func _exit_tree() -> void:
+	_save_master_volume_settings()
 	if is_instance_valid(music):
 		music.stop()
 		music.stream = null
@@ -120,6 +133,7 @@ func _configure_ui_font_fallback() -> void:
 	pixel_font.fallbacks = [CJK_FONT]
 
 func _process(delta: float) -> void:
+	_update_screen_shake(delta)
 	if game_over or is_paused:
 		return
 	remaining_time = maxf(remaining_time - delta, 0.0)
@@ -128,13 +142,11 @@ func _process(delta: float) -> void:
 		_finish_game(false, "时间到")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event is InputEventKey or not event.pressed or event.echo:
-		return
-	if game_over and _is_restart_key(event):
+	if event.is_action_pressed("restart") and (game_over or is_paused):
 		get_viewport().set_input_as_handled()
 		_restart_game()
 		return
-	if not game_over and _is_pause_key(event):
+	if not game_over and event.is_action_pressed("pause_game"):
 		if is_paused:
 			_resume_game()
 		else:
@@ -144,9 +156,13 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_player_health_changed(current_health: int, maximum_health: int) -> void:
 	if last_health >= 0 and current_health < last_health:
 		_play_audio(hurt_sfx)
+		_add_screen_shake(0.4)
 		_flash_screen(Color(0.95, 0.2, 0.2, 1.0))
 	last_health = current_health
 	health_label.text = "生命 %d / %d" % [current_health, maximum_health]
+
+func _on_player_attack_hit() -> void:
+	_add_screen_shake(0.12)
 
 func _on_attack_started() -> void:
 	_play_audio(attack_sfx)
@@ -191,7 +207,7 @@ func _advance_to_next_level() -> void:
 	scrolls_collected = 0
 	objective_label = current_level.get_node("ObjectiveLabel") as Label
 	if current_level_index == 2:
-		player.global_position = Vector2(222.0, 414.0)
+		player.global_position = (level_two.get_node("SpawnPoint") as Marker2D).global_position
 	elif current_level_index == 3:
 		player.global_position = (level_three.get_node("SpawnPoint") as Marker2D).global_position
 	elif current_level_index == 4:
@@ -232,6 +248,8 @@ func _on_boss_health_changed(current_health: int, maximum_health: int) -> void:
 func _on_boss_defeated() -> void:
 	boss_defeated = true
 	boss_name_label.text = "最终 Boss 已击败"
+	_add_screen_shake(0.7)
+	_flash_screen(Color(0.95, 0.76, 0.3, 1.0))
 	_update_boss_display()
 	_update_scroll_hud()
 
@@ -303,11 +321,16 @@ func _finish_game(won: bool, message: String) -> void:
 		_play_audio(hurt_sfx)
 		_flash_screen(Color(0.95, 0.2, 0.2, 1.0))
 
-func _is_restart_key(event: InputEventKey) -> bool:
-	return event.keycode == KEY_R or event.physical_keycode == KEY_R
+func _add_screen_shake(strength: float) -> void:
+	_shake_strength = minf(_shake_strength + strength, 1.0)
 
-func _is_pause_key(event: InputEventKey) -> bool:
-	return event.keycode == KEY_ESCAPE or event.keycode == KEY_P or event.physical_keycode == KEY_P
+func _update_screen_shake(delta: float) -> void:
+	if _shake_strength <= 0.0:
+		return
+	camera.offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * _shake_strength * SCREEN_SHAKE_PIXELS
+	_shake_strength = maxf(_shake_strength - SCREEN_SHAKE_DECAY * delta, 0.0)
+	if _shake_strength <= 0.0:
+		camera.offset = Vector2.ZERO
 
 func _pause_game() -> void:
 	if game_over or is_paused:
@@ -340,6 +363,9 @@ func _load_master_volume() -> float:
 
 func _on_master_volume_changed(value: float) -> void:
 	_apply_master_volume(value)
+	_volume_save_timer.start()
+
+func _save_master_volume_settings() -> void:
 	var settings := ConfigFile.new()
 	settings.load(SETTINGS_PATH)
 	settings.set_value("audio", "master_volume", master_volume_slider.value)

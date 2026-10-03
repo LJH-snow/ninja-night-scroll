@@ -17,9 +17,8 @@ func _ready() -> void:
 		call_deferred("_start_game")
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_ENTER or event.keycode == KEY_KP_ENTER:
-			_start_game()
+	if event.is_action_pressed("ui_accept"):
+		_start_game()
 
 func _start_game() -> void:
 	get_tree().change_scene_to_file(GAME_SCENE)

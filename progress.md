@@ -310,3 +310,17 @@
 - 2026-10-02 尝试 V24 使用浏览器原生 `press` 事件和 `delayMs` 自动移动，仍无法稳定控制 Godot Web 的连续移动；未产生可信的逐关 Web 时间。确定性 `full_campaign_test.gd` 仍是当前可靠的完整通关验证。
 - 2026-10-02 新增 Web-only `playtest=autoplay` 桥接并在真实 Web 导出中完成自动五关：初始生命 `2/3`，五关均 `3/3` 卷轴、出口成功、生命记录为 `3/3`；逐关耗时 `0.424s / 0.332s / 0.331s / 0.334s / 0.333s`，最终累计 `1.759s`，剩余总计时 `178.171s`。这是桥接直接驱动的 Web 运行时数据，不是人工移动速度成绩。
 - 2026-10-02 用户确认 itch.io 页面已公开：其他电脑无需登录即可加载游戏，点击开始后声音正常，并完成第五关显示“任务完成”。项目收尾完成。
+## 2026-10-03
+
+- 按既定优化方向实施阶段 18：打击感、手柄支持和 CI。
+- 玩家与敌人接入帧表动画：忍者用 ninja_blue_sheet 第 0 行站立、第 1 行行走、第 6 行攻击，攻击帧按 attack_duration 播放；猪敌人以 6fps 交替 0/1 帧，静止回到场景初始帧。
+- 受击反馈升级：敌人受击闪白 Color(5,5,5) 后恢复 base 色，顺带修复 Boss 闪白恢复纯白丢失棕色 tint 的问题；新增玩家 attack_hit 信号驱动小幅度震屏。
+- 主场景加入 Camera2D（固定 480,270）与 trauma 衰减震屏：受伤 0.4、Boss 击败 0.7；HUD 位于 CanvasLayer 保持稳定；背景 ColorRect 外扩 16px 并把默认清屏色调成背景色，避免震动露边。
+- 输入全部改为 InputMap 动作：键盘键位不变，新增手柄（摇杆/十字键、A/X 攻击、Y/RB 手里剑、Start 暂停/重开）；标题页用 ui_accept 启动；暂停时按 R 也能重开（旧逻辑只在 game_over 分支处理 R）。
+- 音量滑块保存改为 0.4s 防抖 + _exit_tree 兜底；LevelTwo 出生点从 main.gd 硬编码 (222,414) 改为场景 SpawnPoint（全局位置不变）。
+- 新增 tests/input_actions_test.gd、tests/pause_restart_input_test.gd、tests/level_two_spawn_point_test.gd；全量 18 个测试通过；主场景 headless 120 帧冒烟通过（动画推进、震屏衰减归零）。
+- 新增 .github/workflows/tests.yml：push/PR 安装官方 Godot 4.7.2 Linux 版，--import 后逐个运行 tests/*_test.gd，任一 FAIL 或非零退出即失败。
+- Web/macOS 发布包尚未重新导出；下次更新 itch.io 前需重新导出并复测五关。
+- 2026-10-03 重新导出发布包：Web（`release/ninja-night-scroll-web.zip`，SHA-256 `c8aeea10…2bd9e3`）与 macOS Universal 2（`release/macos/NinjaNightScroll.zip`，SHA-256 `9e990aab…bfc082e`），`unzip -t`、ad-hoc codesign、lipo 双架构均通过。
+- 2026-10-03 新包浏览器冒烟通过：真实 Chromium 加载导出页，Godot 4.7.2 启动日志正常、标题页中文渲染完整、0 个页面错误；`docs/release_manifest.md` 已更新为 2026-10-03 基线。
+- 2026-10-03 提交曾被 Mimosa git 门禁拦截：扫描把 gitignore 的构建产物 `release/web/index.js`（Godot 导出的压缩运行时）误报为 SSRF/注入。处理：给项目加 `.semgrepignore` 排除 `release/` 等产物目录后重试提交。

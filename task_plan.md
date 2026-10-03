@@ -27,6 +27,7 @@
 - [x] 阶段 15：加入短剑击退和手里剑远程攻击
 - [x] 阶段 16：加入回血道具并改善五关实机可玩性
 - [x] 阶段 17：完成 Web 自动桥接回归与用户端五关通关验证，发布最终版本
+- [x] 阶段 18：加入打击感（角色动画、受击闪白、屏幕震动）、手柄支持和 GitHub Actions 测试
 
 ## 当前决策
 
@@ -46,6 +47,15 @@
 ## 下一步
 
 项目已发布；后续根据玩家反馈处理兼容性、难度或内容更新。
+
+## 阶段 18 执行备注
+
+- 2026-10-03 输入全部迁移到 InputMap 动作（move_left/right/up/down、attack、shuriken、pause_game、restart），键盘原键位不变，新增手柄绑定：摇杆/十字键移动、A/X 攻击、Y/RB 手里剑、Start 暂停与重开；标题页改用 ui_accept。
+- 2026-10-03 玩家使用帧表动画：帧表第 0 行站立、第 1 行行走、第 6 行攻击（攻击进度直接映射 4 帧）；猪敌人以 0/1 帧交替行走，静止恢复各自场景初始帧。
+- 2026-10-03 受击闪白改为 Color(5,5,5) 并恢复各自 base 色；修复 Boss 闪白恢复成纯白丢失棕色 tint 的旧问题。
+- 2026-10-03 主场景加入固定 Camera2D 与 trauma 式屏幕震动（受伤 0.4、挥剑命中 0.12、Boss 击败 0.7），HUD 在 CanvasLayer 不受震动影响；背景 ColorRect 外扩 16px 遮蔽露边，清屏色改为背景同色。
+- 2026-10-03 修复暂停时按 R 无效（旧逻辑只在 game_over 分支处理 R）；音量保存改为 0.4s 防抖定时器并在 _exit_tree 兜底，不再拖动每 tick 写盘；LevelTwo 出生点改用场景 SpawnPoint（局部 (150,320)，全局保持 (222,414)）。
+- 2026-10-03 新增 input_actions_test、pause_restart_input_test、level_two_spawn_point_test，全量 18 个测试通过；headless 主场景 120 帧冒烟通过。新增 .github/workflows/tests.yml 在 push/PR 时安装 Godot 4.7.2 跑全量测试。
 
 ## 阶段 17 执行备注
 

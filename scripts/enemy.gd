@@ -13,18 +13,22 @@ var health: int = 0
 var target: NinjaPlayer
 var contact_cooldown_left := 0.0
 var knockback_velocity := Vector2.ZERO
+var _walk_anim_time := 0.0
+var _base_sprite_color := Color.WHITE
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
 	health = max_health
 	add_to_group("enemies")
 	target = get_tree().get_first_node_in_group("player") as NinjaPlayer
+	_base_sprite_color = sprite.modulate
 
 func _physics_process(delta: float) -> void:
 	if knockback_velocity.length_squared() > 1.0:
 		velocity = knockback_velocity
 		move_and_slide()
 		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 520.0 * delta)
+		_update_walk_animation(delta)
 		return
 	contact_cooldown_left = maxf(contact_cooldown_left - delta, 0.0)
 	if not is_instance_valid(target):
@@ -38,10 +42,18 @@ func _physics_process(delta: float) -> void:
 	velocity = direction * speed
 	sprite.flip_h = direction.x < 0.0
 	move_and_slide()
+	_update_walk_animation(delta)
 
 	if global_position.distance_to(target.global_position) <= contact_distance and contact_cooldown_left <= 0.0:
 		if target.take_damage(contact_damage):
 			contact_cooldown_left = contact_cooldown
+
+func _update_walk_animation(delta: float) -> void:
+	if velocity == Vector2.ZERO:
+		sprite.frame = 0
+		return
+	_walk_anim_time += delta
+	sprite.frame = int(_walk_anim_time * 6.0) % 2
 
 func take_damage(amount: int) -> bool:
 	if amount <= 0 or health <= 0:
@@ -50,7 +62,7 @@ func take_damage(amount: int) -> bool:
 	if health == 0:
 		call_deferred("queue_free")
 	else:
-		sprite.modulate = Color(1.0, 0.55, 0.55, 1.0)
+		sprite.modulate = Color(5.0, 5.0, 5.0, 1.0)
 		get_tree().create_timer(0.12).timeout.connect(_clear_hit_flash)
 	return true
 
@@ -59,4 +71,4 @@ func apply_knockback(direction: Vector2, strength: float) -> void:
 
 func _clear_hit_flash() -> void:
 	if is_instance_valid(sprite):
-		sprite.modulate = Color.WHITE
+		sprite.modulate = _base_sprite_color

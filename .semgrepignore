@@ -1,0 +1,6 @@
+# Mimosa 扫描范围：只看源码，跳过导出产物与本地运行痕迹
+release/
+output/
+.playwright-cli/
+.midscene_run/
+.learnings/

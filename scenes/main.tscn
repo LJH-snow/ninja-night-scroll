@@ -77,10 +77,15 @@ stream = ExtResource("12_victory")
 volume_db = -2.0
 
 [node name="Background" type="ColorRect" parent="."]
-offset_right = 960.0
-offset_bottom = 540.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 976.0
+offset_bottom = 556.0
 mouse_filter = 2
 color = Color(0.031373, 0.054902, 0.086275, 1)
+
+[node name="Camera" type="Camera2D" parent="."]
+position = Vector2(480, 270)
 
 [node name="Playfield" type="Panel" parent="."]
 offset_left = 72.0

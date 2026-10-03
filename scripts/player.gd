@@ -3,9 +3,17 @@ extends CharacterBody2D
 
 const SHURIKEN_SCENE: PackedScene = preload("res://scenes/shuriken.tscn")
 
+const ANIM_FRAMES_PER_ROW := 4
+const ANIM_IDLE_ROW := 0
+const ANIM_WALK_ROW := 1
+const ANIM_ATTACK_ROW := 6
+const WALK_ANIM_FPS := 8.0
+const IDLE_ANIM_FPS := 5.0
+
 signal attack_started
 signal shuriken_started
 signal attack_finished
+signal attack_hit
 signal health_changed(current_health, maximum_health)
 signal died
 
@@ -30,6 +38,7 @@ var shuriken_cooldown_left := 0.0
 var attack_targets: Dictionary = {}
 var health: int = 0
 var invulnerability_time_left := 0.0
+var _anim_loop_time := 0.0
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -40,11 +49,9 @@ func _ready() -> void:
 	health_changed.emit(health, max_health)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event is InputEventKey or not event.pressed or event.echo:
-		return
-	if _is_shuriken_key(event):
+	if event.is_action_pressed("shuriken"):
 		_throw_shuriken()
-	elif _is_attack_key(event):
+	elif event.is_action_pressed("attack"):
 		_start_attack()
 
 func _physics_process(delta: float) -> void:
@@ -56,11 +63,11 @@ func _physics_process(delta: float) -> void:
 
 	if is_dead():
 		velocity = Vector2.ZERO
-		attack_area.set_deferred("monitoring", false)
+		_set_attack_monitoring(false)
 		attack_visual.visible = false
 		return
 
-	var input_direction := _get_movement_input()
+	var input_direction := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if input_direction != Vector2.ZERO:
 		facing_direction = input_direction
 		sprite.flip_h = facing_direction.x < 0.0
@@ -71,30 +78,29 @@ func _physics_process(delta: float) -> void:
 	shuriken_cooldown_left = maxf(shuriken_cooldown_left - delta, 0.0)
 	var was_attacking := attack_time_left > 0.0
 	attack_time_left = maxf(attack_time_left - delta, 0.0)
-	attack_area.set_deferred("monitoring", attack_time_left > 0.0)
+	_set_attack_monitoring(attack_time_left > 0.0)
 	attack_visual.visible = attack_time_left > 0.0
 	_damage_attack_targets()
+	_update_sprite_animation(input_direction, delta)
 	if was_attacking and attack_time_left == 0.0:
 		attack_finished.emit()
 
-func _get_movement_input() -> Vector2:
-	var horizontal := 0.0
-	var vertical := 0.0
-	if Input.is_physical_key_pressed(KEY_A) or Input.is_key_pressed(KEY_LEFT):
-		horizontal -= 1.0
-	if Input.is_physical_key_pressed(KEY_D) or Input.is_key_pressed(KEY_RIGHT):
-		horizontal += 1.0
-	if Input.is_physical_key_pressed(KEY_W) or Input.is_key_pressed(KEY_UP):
-		vertical -= 1.0
-	if Input.is_physical_key_pressed(KEY_S) or Input.is_key_pressed(KEY_DOWN):
-		vertical += 1.0
-	return Vector2(horizontal, vertical).normalized()
+func _set_attack_monitoring(enabled: bool) -> void:
+	if attack_area.monitoring == enabled:
+		return
+	attack_area.set_deferred("monitoring", enabled)
 
-func _is_attack_key(event: InputEventKey) -> bool:
-	return event.keycode == KEY_SPACE or event.physical_keycode == KEY_SPACE
-
-func _is_shuriken_key(event: InputEventKey) -> bool:
-	return event.keycode == KEY_SHIFT or event.physical_keycode == KEY_SHIFT
+func _update_sprite_animation(input_direction: Vector2, delta: float) -> void:
+	if attack_time_left > 0.0:
+		var attack_progress := 1.0 - attack_time_left / maxf(attack_duration, 0.001)
+		var attack_index := clampi(int(attack_progress * float(ANIM_FRAMES_PER_ROW)), 0, ANIM_FRAMES_PER_ROW - 1)
+		sprite.frame = ANIM_ATTACK_ROW * ANIM_FRAMES_PER_ROW + attack_index
+		return
+	_anim_loop_time += delta
+	if input_direction != Vector2.ZERO:
+		sprite.frame = ANIM_WALK_ROW * ANIM_FRAMES_PER_ROW + int(_anim_loop_time * WALK_ANIM_FPS) % ANIM_FRAMES_PER_ROW
+	else:
+		sprite.frame = ANIM_IDLE_ROW * ANIM_FRAMES_PER_ROW + int(_anim_loop_time * IDLE_ANIM_FPS) % ANIM_FRAMES_PER_ROW
 
 func _start_attack() -> void:
 	if attack_cooldown_left > 0.0 or is_dead():
@@ -120,12 +126,16 @@ func _throw_shuriken() -> void:
 func _damage_attack_targets() -> void:
 	if attack_time_left <= 0.0:
 		return
+	var damaged_any := false
 	for body in attack_area.get_overlapping_bodies():
 		if body.has_method("take_damage") and not attack_targets.has(body):
 			attack_targets[body] = true
-			body.take_damage(attack_damage)
-			if body.has_method("apply_knockback"):
-				body.apply_knockback(global_position.direction_to(body.global_position), attack_knockback)
+			if body.take_damage(attack_damage):
+				damaged_any = true
+				if body.has_method("apply_knockback"):
+					body.apply_knockback(global_position.direction_to(body.global_position), attack_knockback)
+	if damaged_any:
+		attack_hit.emit()
 
 func take_damage(amount: int) -> bool:
 	if amount <= 0 or is_dead() or invulnerability_time_left > 0.0:

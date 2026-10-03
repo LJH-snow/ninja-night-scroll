@@ -16,6 +16,9 @@ var health: int = 0
 var target: Node2D
 var fire_cooldown_left := 0.65
 var knockback_velocity := Vector2.ZERO
+var _walk_anim_time := 0.0
+var _idle_frame := 0
+var _base_sprite_color := Color.WHITE
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -23,12 +26,15 @@ func _ready() -> void:
 	add_to_group("enemies")
 	target = _find_player()
 	sprite.modulate = Color(0.68, 0.76, 1.0, 1.0)
+	_idle_frame = sprite.frame
+	_base_sprite_color = sprite.modulate
 
 func _physics_process(delta: float) -> void:
 	if knockback_velocity.length_squared() > 1.0:
 		velocity = knockback_velocity
 		move_and_slide()
 		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 520.0 * delta)
+		_update_walk_animation(delta)
 		return
 	if not is_instance_valid(target):
 		target = _find_player()
@@ -46,6 +52,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 	move_and_slide()
 	sprite.flip_h = direction.x < 0.0
+	_update_walk_animation(delta)
 
 	fire_cooldown_left = maxf(fire_cooldown_left - delta, 0.0)
 	if distance <= attack_range and fire_cooldown_left <= 0.0:
@@ -65,6 +72,13 @@ func _fire_at_target(direction: Vector2) -> void:
 	get_parent().add_child(projectile)
 	projectile.call("launch", global_position + direction * 16.0, direction)
 
+func _update_walk_animation(delta: float) -> void:
+	if velocity == Vector2.ZERO:
+		sprite.frame = _idle_frame
+		return
+	_walk_anim_time += delta
+	sprite.frame = int(_walk_anim_time * 6.0) % 2
+
 func take_damage(amount: int) -> bool:
 	if amount <= 0 or health <= 0:
 		return false
@@ -72,7 +86,7 @@ func take_damage(amount: int) -> bool:
 	if health == 0:
 		call_deferred("queue_free")
 	else:
-		sprite.modulate = Color(1.0, 0.55, 0.55, 1.0)
+		sprite.modulate = Color(5.0, 5.0, 5.0, 1.0)
 		get_tree().create_timer(0.12).timeout.connect(_clear_hit_flash)
 	return true
 
@@ -81,4 +95,4 @@ func apply_knockback(direction: Vector2, strength: float) -> void:
 
 func _clear_hit_flash() -> void:
 	if is_instance_valid(sprite):
-		sprite.modulate = Color(0.68, 0.76, 1.0, 1.0)
+		sprite.modulate = _base_sprite_color

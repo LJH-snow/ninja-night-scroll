@@ -23,6 +23,9 @@ var health: int = 0
 var target: Node2D
 var fire_cooldown_left := 1.1
 var is_defeated := false
+var _walk_anim_time := 0.0
+var _idle_frame := 0
+var _base_sprite_color := Color.WHITE
 
 func _ready() -> void:
 	motion_mode = CharacterBody2D.MOTION_MODE_FLOATING
@@ -30,6 +33,8 @@ func _ready() -> void:
 	add_to_group("enemies")
 	add_to_group("bosses")
 	target = _find_player()
+	_idle_frame = sprite.frame
+	_base_sprite_color = sprite.modulate
 	health_changed.emit(health, max_health)
 
 func _physics_process(delta: float) -> void:
@@ -51,6 +56,7 @@ func _physics_process(delta: float) -> void:
 		velocity = Vector2.ZERO
 	move_and_slide()
 	sprite.flip_h = direction.x < 0.0
+	_update_walk_animation(delta)
 
 	fire_cooldown_left = maxf(fire_cooldown_left - delta, 0.0)
 	if distance <= attack_range and fire_cooldown_left <= 0.0:
@@ -74,6 +80,13 @@ func _fire_burst(direction: Vector2) -> void:
 		get_parent().add_child(projectile)
 		projectile.call("launch", global_position + direction * 20.0, direction.rotated(angle_offset))
 
+func _update_walk_animation(delta: float) -> void:
+	if is_defeated or velocity == Vector2.ZERO:
+		sprite.frame = _idle_frame
+		return
+	_walk_anim_time += delta
+	sprite.frame = int(_walk_anim_time * 6.0) % 2
+
 func take_damage(amount: int) -> bool:
 	if amount <= 0 or health <= 0 or is_defeated:
 		return false
@@ -84,10 +97,10 @@ func take_damage(amount: int) -> bool:
 		defeated.emit()
 		call_deferred("queue_free")
 	else:
-		sprite.modulate = Color(1.0, 0.55, 0.55, 1.0)
+		sprite.modulate = Color(5.0, 5.0, 5.0, 1.0)
 		get_tree().create_timer(0.12).timeout.connect(_clear_hit_flash)
 	return true
 
 func _clear_hit_flash() -> void:
 	if is_instance_valid(sprite) and not is_defeated:
-		sprite.modulate = Color.WHITE
+		sprite.modulate = _base_sprite_color

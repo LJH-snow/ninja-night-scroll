@@ -8,8 +8,9 @@ A top-down 2D action game made with Godot 4.7. Guide a ninja through five connec
 - `Space`: Sword attack and knockback
 - `Shift`: Throw shuriken
 - `Esc` / `P`: Pause or resume
+- `R`: Restart while paused, or after victory or defeat
 - Pause menu slider: Adjust and save the master volume
-- `R`: Restart after victory or defeat
+- Gamepad: Left stick or D-pad to move, `A`/`X` to attack, `Y`/`RB` to throw a shuriken, `Start` to pause and to restart
 
 ## Running
 
@@ -32,7 +33,7 @@ The game is published on itch.io: <https://ljh-snow.itch.io/ninja-night-scroll>
 - itch.io Web build: `release/ninja-night-scroll-web.zip`
 - Universal 2 macOS build: `release/macos/NinjaNightScroll.zip`
 - Page cover: `release/itch-cover.png`
-- 15 Godot tests pass, and the Web autoplay bridge completes all five levels.
+- 18 Godot tests pass on every push via GitHub Actions, and the Web autoplay bridge completes all five levels.
 
 The macOS build is ad-hoc signed and has not been signed with Developer ID or notarized.
 See `docs/asset_licenses.md` for the asset and font license records.
@@ -49,8 +50,9 @@ See `docs/asset_licenses.md` for the asset and font license records.
 - `Space`：攻击
 - `Shift`：发射手里剑
 - `Esc` / `P`：暂停或继续
+- `R`：暂停时或胜负结束后重新开始
 - 暂停菜单中的滑块：调节并保存总音量
-- `R`：胜利或失败后重新开始
+- 手柄：左摇杆或十字键移动，`A`/`X` 攻击，`Y`/`RB` 发射手里剑，`Start` 暂停和重开
 
 ## 运行
 
