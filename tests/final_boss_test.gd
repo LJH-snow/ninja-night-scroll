@@ -21,6 +21,7 @@ func _run() -> void:
 	var main: Node2D = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	await process_frame
+	TranslationServer.set_locale("zh")
 	await physics_frame
 	_check(main.has_node("HUD/BossPanel/BossHealthBar"), "HUD contains a boss health bar")
 	var player: Node = main.get_node("Player")

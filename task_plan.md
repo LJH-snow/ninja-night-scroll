@@ -28,6 +28,7 @@
 - [x] 阶段 16：加入回血道具并改善五关实机可玩性
 - [x] 阶段 17：完成 Web 自动桥接回归与用户端五关通关验证，发布最终版本
 - [x] 阶段 18：加入打击感（角色动画、受击闪白、屏幕震动）、手柄支持和 GitHub Actions 测试
+- [x] 阶段 19：中英双语界面与语言切换（translations CSV + 暂停/标题页切换按钮 + 系统语言自动检测）
 
 ## 当前决策
 
@@ -47,6 +48,13 @@
 ## 下一步
 
 项目已发布；后续根据玩家反馈处理兼容性、难度或内容更新。
+
+## 阶段 19 执行备注
+
+- 2026-10-03 新增 `assets/ui/translations.csv`（keys/en/zh 三列，zh 列为原文恒等映射），以中文原文为 key；`scripts/locale_preferences.gd` 负责注册翻译、读取/保存语言偏好（`user://settings.cfg` 的 general/locale，默认 auto 按系统语言检测）。
+- 2026-10-03 Godot 4.7 的 project settings 翻译列表在 `--script` 测试模式不加载、静态控件自动翻译只在 locale 变化通知时触发，因此翻译改为代码注册（ensure_translation_registered），静态文案由脚本显式 `tr()` 设置，行为在运行/测试/导出全模式一致。
+- 2026-10-03 main.gd 全部 HUD/结算/暂停文案走 tr()，目标提示经 `_set_objective(key,args)` 保存以便切换语言后刷新；标题页与暂停菜单各加 LanguageButton，即时切换并保存。
+- 2026-10-03 新增 tests/localization_test.gd；五个断言中文 HUD 的既有测试固定 `TranslationServer.set_locale("zh")`，测试结束时恢复用户语言偏好。全量 19 个测试通过。
 
 ## 阶段 18 执行备注
 

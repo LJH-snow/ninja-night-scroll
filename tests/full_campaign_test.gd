@@ -9,6 +9,7 @@ func _run() -> void:
 	var main: Node2D = load("res://scenes/main.tscn").instantiate()
 	root.add_child(main)
 	await process_frame
+	TranslationServer.set_locale("zh")
 	await physics_frame
 	var player: Node = main.get_node("Player")
 	player.call("take_damage", 1)

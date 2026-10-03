@@ -10,6 +10,7 @@ A top-down 2D action game made with Godot 4.7. Guide a ninja through five connec
 - `Esc` / `P`: Pause or resume
 - `R`: Restart while paused, or after victory or defeat
 - Pause menu slider: Adjust and save the master volume
+- Language: Toggle 中文/English from the title screen or pause menu; saved with the volume setting
 - Gamepad: Left stick or D-pad to move, `A`/`X` to attack, `Y`/`RB` to throw a shuriken, `Start` to pause and to restart
 
 ## Running
@@ -52,6 +53,7 @@ See `docs/asset_licenses.md` for the asset and font license records.
 - `Esc` / `P`：暂停或继续
 - `R`：暂停时或胜负结束后重新开始
 - 暂停菜单中的滑块：调节并保存总音量
+- 语言：标题页或暂停菜单中一键切换 中文/English，选择随音量设置一起保存
 - 手柄：左摇杆或十字键移动，`A`/`X` 攻击，`Y`/`RB` 发射手里剑，`Start` 暂停和重开
 
 ## 运行

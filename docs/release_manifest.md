@@ -3,20 +3,20 @@
 - 验证日期：2026-10-03
 - Godot：`4.7.2.stable.steam.ed1daf0bf`
 - 目标：itch.io Web 上传包
-- 本次内容：阶段 18（手柄支持、角色/敌人帧表动画、受击闪白、屏幕震动、暂停时 R 重开、音量保存防抖、第二关 SpawnPoint）
+- 本次内容：阶段 18（手柄、动画、震屏、暂停重开）+ 阶段 19（中英双语界面与语言切换）
 
 ## Web 候选包
 
 - 文件：`release/ninja-night-scroll-web.zip`
 - 内容：`index.html`、WASM、JavaScript、PCK、音频 worklet 和图标资源。
-- SHA-256：`c8aeea10caff3a735e2fab508ac5608b80e7461ffa8bd7bb121da9de302bd9e3`
+- SHA-256：`c45d0172c119456c7c87bdf2ed0079f9c96b962801b802ec6581a590f1e8c168`
 - 校验：`unzip -t` 通过。
 - PCK：8,735,072 字节，含五张地图、最终 Boss、手里剑、回血补给、远程敌人/弹体、Web 自动测试桥接、Noto Sans SC 和 OFL 1.1；导出过滤掉 godot-ai 插件、测试脚本和发布文档。
-- 浏览器冒烟：真实 Chromium（headless）加载 `index.html`，Godot 4.7.2 启动日志正常、canvas 渲染标题页、0 个页面错误；截图确认中文界面、角色展示和操作说明。
+- 浏览器冒烟：真实 Chromium（headless，英文系统语言）加载 `index.html`，标题页完整渲染英文界面（标题、操作说明、Start Game、右下角中文切换按钮），0 个页面错误。
 
 ## 运行验证
 
-- 18 个 `tests/*_test.gd` 全部通过（含新增输入动作、暂停重开、第二关出生点测试）；主场景 headless 冒烟通过。
+- 19 个 `tests/*_test.gd` 全部通过（含 localization_test 与阶段 18 的输入动作、暂停重开、第二关出生点测试）；主场景 headless 冒烟通过。
 - GitHub Actions workflow（`.github/workflows/tests.yml`）在 push/PR 时安装官方 Godot 4.7.2 并跑全量测试。
 - 2026-10-03 包尚未重跑 Web `?playtest=autoplay` 五关桥接与人工键盘通关；上传 itch.io 后建议先自行试玩一局。历史记录：Web 自动桥接在 2026-10-02 包中完成五关，逐关遥测 `0.424s / 0.332s / 0.331s / 0.334s / 0.333s`，最终剩余 `178.171s`，五关均 `3/3` 卷轴、出口成功。该模式是测试桥接路径，不代表人工移动速度。
 
@@ -24,7 +24,7 @@
 
 - 文件：`release/macos/NinjaNightScroll.zip`
 - 架构：Universal 2（x86_64 + arm64）。
-- SHA-256：`9e990aab2110ab22a5472b1170261c5314e4f81f97d303054f793a632bfc082e`
+- SHA-256：`894db2f1ea34b50f61ee22492810baa1ddd01fee774a9472d65034665dc69271`
 - 校验：ZIP 可解压；`codesign --verify --deep --strict` 通过；可执行文件为 Universal 2（x86_64 + arm64）。
 - 签名：ad-hoc；未使用 Developer ID，未 notarize。检查到 Keychain 中有 0 个有效签名身份、0 个 Developer ID Application 身份。
 - 当前包包含第五关、最终 Boss、手里剑、回血补给、远程敌人与弹体，以及阶段 18 的动画、手柄和震屏改动；标题页、暂停流程和音量设置也已包含。

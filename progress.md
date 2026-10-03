@@ -324,3 +324,10 @@
 - 2026-10-03 重新导出发布包：Web（`release/ninja-night-scroll-web.zip`，SHA-256 `c8aeea10…2bd9e3`）与 macOS Universal 2（`release/macos/NinjaNightScroll.zip`，SHA-256 `9e990aab…bfc082e`），`unzip -t`、ad-hoc codesign、lipo 双架构均通过。
 - 2026-10-03 新包浏览器冒烟通过：真实 Chromium 加载导出页，Godot 4.7.2 启动日志正常、标题页中文渲染完整、0 个页面错误；`docs/release_manifest.md` 已更新为 2026-10-03 基线。
 - 2026-10-03 提交曾被 Mimosa git 门禁拦截：扫描把 gitignore 的构建产物 `release/web/index.js`（Godot 导出的压缩运行时）误报为 SSRF/注入。处理：给项目加 `.semgrepignore` 排除 `release/` 等产物目录后重试提交。
+## 2026-10-03（阶段 19：双语界面）
+
+- 实现中英双语界面：`translations.csv` 以中文原文为 key（zh 列恒等、en 列翻译），脚本注册翻译；zh/en 之外语言按 Godot 默认回退英文。
+- main.gd 全部玩家可见文案 tr() 化，目标提示保存 key+参数便于切语言后刷新；静态场景文案由脚本显式设置，规避测试模式下自动翻译不触发的时序问题。
+- 标题页与暂停菜单新增语言切换按钮（显示目标语言名），选择持久化到 settings.cfg；首次运行按系统语言自动选择。
+- 5 个断言中文文案的测试固定 zh locale；新增 localization_test 覆盖翻译查找、格式串、场景文案与切换按钮。全量 19 个测试通过。
+- 2026-10-03 重新导出双语版本发布包：Web（SHA-256 `c45d0172…8c168`）与 macOS Universal 2（SHA-256 `894db2f1…c69271`），`unzip -t`、ad-hoc codesign、双架构验证通过；浏览器冒烟确认英文标题页与中文切换按钮渲染正常、0 页面错误。`release_manifest.md` 已更新。

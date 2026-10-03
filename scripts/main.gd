@@ -38,6 +38,7 @@ const WEB_PLAYTEST_BRIDGE: Script = preload("res://scripts/web_playtest_bridge.g
 @onready var title_button: Button = $HUD/PauseOverlay/PausePanel/TitleButton
 @onready var master_volume_slider: HSlider = $HUD/PauseOverlay/PausePanel/MasterVolumeSlider
 @onready var master_volume_label: Label = $HUD/PauseOverlay/PausePanel/MasterVolumeLabel
+@onready var language_button: Button = $HUD/PauseOverlay/PausePanel/LanguageButton
 @onready var camera: Camera2D = $Camera
 
 var scrolls_collected := 0
@@ -50,8 +51,13 @@ var last_health := -1
 var boss_defeated := false
 var _shake_strength := 0.0
 var _volume_save_timer: Timer
+var _objective_key := ""
+var _objective_args: Array = []
+var _result_message_key := ""
 
 func _ready() -> void:
+	LocalePreferences.apply_saved_locale()
+	_translate_static_texts()
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	playfield.process_mode = Node.PROCESS_MODE_PAUSABLE
 	level_two.process_mode = Node.PROCESS_MODE_DISABLED
@@ -75,6 +81,8 @@ func _ready() -> void:
 	master_volume_slider.value_changed.connect(_on_master_volume_changed)
 	master_volume_slider.set_value_no_signal(_load_master_volume())
 	_apply_master_volume(master_volume_slider.value)
+	language_button.text = LocalePreferences.toggle_label(TranslationServer.get_locale())
+	language_button.pressed.connect(_on_language_toggle_pressed)
 	_volume_save_timer = Timer.new()
 	_volume_save_timer.one_shot = true
 	_volume_save_timer.wait_time = VOLUME_SAVE_DELAY
@@ -159,10 +167,21 @@ func _on_player_health_changed(current_health: int, maximum_health: int) -> void
 		_add_screen_shake(0.4)
 		_flash_screen(Color(0.95, 0.2, 0.2, 1.0))
 	last_health = current_health
-	health_label.text = "生命 %d / %d" % [current_health, maximum_health]
+	health_label.text = tr("生命 %d / %d") % [current_health, maximum_health]
 
 func _on_player_attack_hit() -> void:
 	_add_screen_shake(0.12)
+
+func _set_objective(key: String, args: Array = []) -> void:
+	_objective_key = key
+	_objective_args = args
+	objective_label.text = _translated_objective()
+
+func _translated_objective() -> String:
+	if _objective_key.is_empty():
+		return ""
+	var translated := tr(_objective_key)
+	return translated % _objective_args if not _objective_args.is_empty() else translated
 
 func _on_attack_started() -> void:
 	_play_audio(attack_sfx)
@@ -172,7 +191,7 @@ func _on_music_finished() -> void:
 		_play_audio(music)
 
 func _on_player_died() -> void:
-	objective_label.text = "生命耗尽"
+	_set_objective("生命耗尽")
 	_finish_game(false, "忍者倒下")
 
 func _on_exit_entered() -> void:
@@ -182,11 +201,11 @@ func _on_exit_entered() -> void:
 		if current_level_index < 5:
 			_advance_to_next_level()
 		elif not boss_defeated:
-			objective_label.text = "先击败最终 Boss"
+			_set_objective("先击败最终 Boss")
 		else:
 			_finish_game(true, "任务完成")
 	else:
-		objective_label.text = "还需收集 %d 个卷轴" % (SCROLL_TARGET - scrolls_collected)
+		_set_objective("还需收集 %d 个卷轴", [SCROLL_TARGET - scrolls_collected])
 
 func _advance_to_next_level() -> void:
 	if current_level_index >= 5 or game_over:
@@ -247,21 +266,21 @@ func _on_boss_health_changed(current_health: int, maximum_health: int) -> void:
 
 func _on_boss_defeated() -> void:
 	boss_defeated = true
-	boss_name_label.text = "最终 Boss 已击败"
+	boss_name_label.text = tr("最终 Boss 已击败")
 	_add_screen_shake(0.7)
 	_flash_screen(Color(0.95, 0.76, 0.3, 1.0))
 	_update_boss_display()
 	_update_scroll_hud()
 
 func _update_scroll_hud() -> void:
-	scroll_label.text = "卷轴 %d / %d" % [scrolls_collected, SCROLL_TARGET]
+	scroll_label.text = tr("卷轴 %d / %d") % [scrolls_collected, SCROLL_TARGET]
 	if scrolls_collected >= SCROLL_TARGET:
 		if current_level_index == 5 and not boss_defeated:
-			objective_label.text = "先击败最终 Boss"
+			_set_objective("先击败最终 Boss")
 		else:
-			objective_label.text = "出口已解锁"
+			_set_objective("出口已解锁")
 	else:
-		objective_label.text = "还需收集 %d 个卷轴" % (SCROLL_TARGET - scrolls_collected)
+		_set_objective("还需收集 %d 个卷轴", [SCROLL_TARGET - scrolls_collected])
 	_update_boss_display()
 
 func _update_boss_display() -> void:
@@ -272,25 +291,25 @@ func _update_boss_display() -> void:
 	boss_panel.visible = true
 	$Hint.visible = false
 	if not boss_defeated:
-		boss_name_label.text = "最终 Boss · 星陨守将"
+		boss_name_label.text = tr("最终 Boss · 星陨守将")
 
 func _update_timer_hud() -> void:
 	var total_seconds := maxi(int(ceil(remaining_time)), 0)
 	var minutes := total_seconds / 60
 	var seconds := total_seconds % 60
-	timer_label.text = "时间 %02d:%02d" % [minutes, seconds]
+	timer_label.text = tr("时间 %02d:%02d") % [minutes, seconds]
 
 func _update_level_display() -> void:
 	if current_level_index == 1:
-		subtitle_label.text = "第一关 · 旧村小径"
+		subtitle_label.text = tr("第一关 · 旧村小径")
 	elif current_level_index == 2:
-		subtitle_label.text = "第二关 · 石仓回廊"
+		subtitle_label.text = tr("第二关 · 石仓回廊")
 	elif current_level_index == 3:
-		subtitle_label.text = "第三关 · 竹海古道"
+		subtitle_label.text = tr("第三关 · 竹海古道")
 	elif current_level_index == 4:
-		subtitle_label.text = "第四关 · 月影神殿"
+		subtitle_label.text = tr("第四关 · 月影神殿")
 	else:
-		subtitle_label.text = "第五关 · 星陨天守"
+		subtitle_label.text = tr("第五关 · 星陨天守")
 
 func _finish_game(won: bool, message: String) -> void:
 	if game_over:
@@ -302,8 +321,9 @@ func _finish_game(won: bool, message: String) -> void:
 	$Hint.visible = true
 	music.stop()
 	result_overlay.visible = true
-	result_label.text = message
-	restart_label.text = "按 R 重新开始"
+	_result_message_key = message
+	result_label.text = tr(message)
+	restart_label.text = tr("按 R 重新开始")
 	player.set_physics_process(false)
 	player.set_process_unhandled_input(false)
 	get_tree().call_group("enemies", "set_physics_process", false)
@@ -375,7 +395,38 @@ func _apply_master_volume(value: float) -> void:
 	var master_bus := AudioServer.get_bus_index("Master")
 	if master_bus >= 0:
 		AudioServer.set_bus_volume_linear(master_bus, clampf(value, 0.0, 1.0))
-	master_volume_label.text = "总音量 %d%%" % roundi(clampf(value, 0.0, 1.0) * 100.0)
+	master_volume_label.text = tr("总音量 %d%%") % roundi(clampf(value, 0.0, 1.0) * 100.0)
+
+func _on_language_toggle_pressed() -> void:
+	var new_locale := LocalePreferences.next_locale(TranslationServer.get_locale())
+	TranslationServer.set_locale(new_locale)
+	LocalePreferences.save_locale(new_locale)
+	language_button.text = LocalePreferences.toggle_label(new_locale)
+	_refresh_translated_texts()
+
+func _refresh_translated_texts() -> void:
+	_translate_static_texts()
+	if game_over:
+		result_label.text = tr(_result_message_key)
+		restart_label.text = tr("按 R 重新开始")
+		return
+	_update_scroll_hud()
+	_update_level_display()
+	_update_timer_hud()
+	health_label.text = tr("生命 %d / %d") % [player.health, player.max_health]
+	_apply_master_volume(master_volume_slider.value)
+
+func _translate_static_texts() -> void:
+	$Title.text = tr("忍者夜行：三分钟夺卷")
+	$Hint.text = tr("WASD / 方向键：移动    Space：攻击    Esc / P：暂停    R：结束后重开")
+	$HUD/ResultOverlay/ResultLabel.text = tr("任务失败")
+	$HUD/ResultOverlay/RestartLabel.text = tr("按 R 重新开始")
+	$HUD/PauseOverlay/PausePanel/PauseTitle.text = tr("游戏暂停")
+	$HUD/PauseOverlay/PausePanel/PauseHint.text = tr("游戏已暂停，倒计时也已暂停")
+	$HUD/PauseOverlay/PausePanel/ResumeButton.text = tr("继续游戏")
+	$HUD/PauseOverlay/PausePanel/RestartButton.text = tr("重新开始")
+	$HUD/PauseOverlay/PausePanel/TitleButton.text = tr("返回标题页")
+	$HUD/PauseOverlay/PausePanel/PauseKeys.text = tr("按 Esc 或 P 继续")
 
 func _flash_screen(color: Color) -> void:
 	flash_overlay.color = color

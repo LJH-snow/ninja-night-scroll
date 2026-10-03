@@ -21,6 +21,8 @@ func _run() -> void:
 
 	root.add_child(main)
 	await process_frame
+	TranslationServer.set_locale("zh")
+	main.call("_refresh_translated_texts")
 	await physics_frame
 	var player: Node = main.get_node("Player")
 	var level_four: Control = main.get_node("LevelFour") as Control
