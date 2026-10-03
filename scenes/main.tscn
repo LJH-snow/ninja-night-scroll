@@ -176,9 +176,9 @@ scale = Vector2(3, 3)
 texture = ExtResource("15_crate")
 
 [node name="ObjectiveLabel" type="Label" parent="Playfield"]
-offset_left = 654.0
+offset_left = 620.0
 offset_top = 112.0
-offset_right = 792.0
+offset_right = 812.0
 offset_bottom = 136.0
 theme_override_colors/font_color = Color(0.94902, 0.882353, 0.647059, 1)
 theme_override_fonts/font = ExtResource("4_font")
@@ -244,7 +244,7 @@ offset_bottom = 58.0
 theme_override_colors/font_color = Color(0.94902, 0.882353, 0.647059, 1)
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 28
-text = "忍者夜行：三分钟夺卷"
+text = "忍者夜行"
 
 [node name="Subtitle" type="Label" parent="."]
 offset_left = 36.0
@@ -259,7 +259,7 @@ text = "第一关 · 旧村小径"
 [node name="HUD" type="CanvasLayer" parent="."]
 
 [node name="StatusPanel" type="Panel" parent="HUD"]
-offset_left = 512.0
+offset_left = 448.0
 offset_top = 16.0
 offset_right = 928.0
 offset_bottom = 68.0
@@ -268,7 +268,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
 [node name="TimerLabel" type="Label" parent="HUD/StatusPanel"]
 offset_left = 16.0
 offset_top = 10.0
-offset_right = 112.0
+offset_right = 120.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.909804, 0.941176, 0.929412, 1)
 theme_override_fonts/font = ExtResource("4_font")
@@ -276,9 +276,9 @@ theme_override_font_sizes/font_size = 17
 text = "时间 03:00"
 
 [node name="ScrollLabel" type="Label" parent="HUD/StatusPanel"]
-offset_left = 116.0
+offset_left = 128.0
 offset_top = 10.0
-offset_right = 214.0
+offset_right = 248.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.94902, 0.882353, 0.647059, 1)
 theme_override_fonts/font = ExtResource("4_font")
@@ -286,9 +286,9 @@ theme_override_font_sizes/font_size = 17
 text = "卷轴 0 / 3"
 
 [node name="HealthLabel" type="Label" parent="HUD/StatusPanel"]
-offset_left = 222.0
+offset_left = 256.0
 offset_top = 10.0
-offset_right = 316.0
+offset_right = 368.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.792157, 0.921569, 0.784314, 1)
 theme_override_fonts/font = ExtResource("4_font")
@@ -296,9 +296,9 @@ theme_override_font_sizes/font_size = 17
 text = "生命 3 / 3"
 
 [node name="Hearts" type="TextureRect" parent="HUD/StatusPanel"]
-offset_left = 322.0
+offset_left = 374.0
 offset_top = 17.0
-offset_right = 402.0
+offset_right = 454.0
 offset_bottom = 33.0
 texture = ExtResource("3_heart")
 
@@ -313,7 +313,7 @@ visible = false
 [node name="BossNameLabel" type="Label" parent="HUD/BossPanel"]
 offset_left = 14.0
 offset_top = 7.0
-offset_right = 208.0
+offset_right = 272.0
 offset_bottom = 27.0
 theme_override_colors/font_color = Color(0.94902, 0.760784, 0.407843, 1)
 theme_override_fonts/font = ExtResource("4_font")
@@ -376,7 +376,7 @@ visible = false
 offset_left = 300.0
 offset_top = 82.0
 offset_right = 660.0
-offset_bottom = 458.0
+offset_bottom = 506.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
 
 [node name="PauseTitle" type="Label" parent="HUD/PauseOverlay/PausePanel"]
@@ -472,9 +472,9 @@ horizontal_alignment = 1
 
 [node name="LanguageButton" type="Button" parent="HUD/PauseOverlay/PausePanel"]
 offset_left = 46.0
-offset_top = 372.0
+offset_top = 368.0
 offset_right = 314.0
-offset_bottom = 416.0
+offset_bottom = 406.0
 theme_override_fonts/font = ExtResource("4_font")
 theme_override_font_sizes/font_size = 16
 text = "Language"

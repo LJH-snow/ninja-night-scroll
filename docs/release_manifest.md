@@ -3,13 +3,13 @@
 - 验证日期：2026-10-03
 - Godot：`4.7.2.stable.steam.ed1daf0bf`
 - 目标：itch.io Web 上传包
-- 本次内容：阶段 18（手柄、动画、震屏、暂停重开）+ 阶段 19（中英双语界面与语言切换）
+- 本次内容：阶段 18（手柄、动画、震屏、暂停重开）+ 阶段 19（中英双语界面与语言切换 + 英文 HUD 布局修正）
 
 ## Web 候选包
 
 - 文件：`release/ninja-night-scroll-web.zip`
 - 内容：`index.html`、WASM、JavaScript、PCK、音频 worklet 和图标资源。
-- SHA-256：`c45d0172c119456c7c87bdf2ed0079f9c96b962801b802ec6581a590f1e8c168`
+- SHA-256：`5cca5b87f53653c0cb55905e29c97d621e29c21fcdca3ba22c140dd001c9f69c`
 - 校验：`unzip -t` 通过。
 - PCK：8,735,072 字节，含五张地图、最终 Boss、手里剑、回血补给、远程敌人/弹体、Web 自动测试桥接、Noto Sans SC 和 OFL 1.1；导出过滤掉 godot-ai 插件、测试脚本和发布文档。
 - 浏览器冒烟：真实 Chromium（headless，英文系统语言）加载 `index.html`，标题页完整渲染英文界面（标题、操作说明、Start Game、右下角中文切换按钮），0 个页面错误。
@@ -24,7 +24,7 @@
 
 - 文件：`release/macos/NinjaNightScroll.zip`
 - 架构：Universal 2（x86_64 + arm64）。
-- SHA-256：`894db2f1ea34b50f61ee22492810baa1ddd01fee774a9472d65034665dc69271`
+- SHA-256：`f282f1a468ffe2f3d919c30b2c63ab058f9ce3623ca2f249353dc93c91a9d2e5`
 - 校验：ZIP 可解压；`codesign --verify --deep --strict` 通过；可执行文件为 Universal 2（x86_64 + arm64）。
 - 签名：ad-hoc；未使用 Developer ID，未 notarize。检查到 Keychain 中有 0 个有效签名身份、0 个 Developer ID Application 身份。
 - 当前包包含第五关、最终 Boss、手里剑、回血补给、远程敌人与弹体，以及阶段 18 的动画、手柄和震屏改动；标题页、暂停流程和音量设置也已包含。

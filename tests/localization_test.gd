@@ -16,7 +16,7 @@ func _run() -> void:
 	LocalePreferences.save_locale("en")
 	TranslationServer.set_locale("en")
 	_check(TranslationServer.translate("任务完成") == "Mission complete", "victory message translates to English")
-	_check(TranslationServer.translate("还需收集 %d 个卷轴") % 2 == "Collect 2 more scrolls",
+	_check(TranslationServer.translate("还需收集 %d 个卷轴") % 2 == "Need 2 more scrolls",
 			"format strings translate with placeholders intact")
 	TranslationServer.set_locale("zh")
 	_check(TranslationServer.translate("任务完成") == "任务完成", "zh locale keeps the Chinese source text")
@@ -27,7 +27,7 @@ func _run() -> void:
 	root.add_child(main)
 	await process_frame
 	await process_frame
-	_check(String(main.get_node("Title").text) == "Ninja Night Scroll: Three-Minute Escape",
+	_check(String(main.get_node("Title").text) == "Ninja Night Scroll",
 			"main scene title auto-translates to English")
 	_check(String(main.get("scroll_label").text) == "Scrolls 0 / 3", "script HUD labels translate to English")
 	_check(main.has_node("HUD/PauseOverlay/PausePanel/LanguageButton"), "pause menu has a language toggle")

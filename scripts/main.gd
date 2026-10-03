@@ -417,7 +417,7 @@ func _refresh_translated_texts() -> void:
 	_apply_master_volume(master_volume_slider.value)
 
 func _translate_static_texts() -> void:
-	$Title.text = tr("忍者夜行：三分钟夺卷")
+	$Title.text = tr("忍者夜行")
 	$Hint.text = tr("WASD / 方向键：移动    Space：攻击    Esc / P：暂停    R：结束后重开")
 	$HUD/ResultOverlay/ResultLabel.text = tr("任务失败")
 	$HUD/ResultOverlay/RestartLabel.text = tr("按 R 重新开始")
